@@ -11,7 +11,7 @@ eleHltSafeVariables = cms.vstring(
     "abs(1. - eSuperClusterOverP)/ecalEnergy",
     "pfIsolationVariables.sumNeutralHadronEt + pfIsolationVariables.sumPhotonEt",
     "hcalOverEcal",
-    "gsfTrack.hitPattern.numberOfHits('MISSING_INNER_HITS')"
+    "gsfTrack.hitPattern().numberOfLostHits(\'MISSING_INNER_HITS\')"
         )
 
 eleHltSafeCategories = cms.VPSet(
