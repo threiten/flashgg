@@ -327,14 +327,18 @@ elif customize.processId == "Data":
     variablesToUse.extend(fc.getRecoVariables(True))
     variablesToUse.append("leadmva := diPhotonMVA().leadmva")
     variablesToUse.append("subleadmva := diPhotonMVA().subleadmva")
+    variablesToUse.append("CosPhi := diPhotonMVA().CosPhi")
     customizeSystematicsForData(process)
 else:
     print "Background MC, so store mgg and central only"
     variablesToUse = minimalNonSignalVariables
     variablesToUse.extend(fc.getRecoVariables(True))
+    variablesToUse.extend(fc.getGenVariables(True))
     variablesToUse.append("sigmarv := diPhotonMVA().sigmarv")
     variablesToUse.append("sigmawv := diPhotonMVA().sigmawv")
     variablesToUse.append("leadmva := diPhotonMVA().leadmva")
+    variablesToUse.append("vtxprob := diPhotonMVA().vtxprob")
+    variablesToUse.append("CosPhi := diPhotonMVA().CosPhi")
     variablesToUse.append("subleadmva := diPhotonMVA().subleadmva")
     customizeSystematicsForBackground(process)
 
@@ -540,7 +544,7 @@ else:
     nAlphaSWeights = -1
     nScaleWeights = -1
     
-if not customize.processId == "Data" and not ((customize.datasetName() and customize.datasetName().count("DiPho"))) and not (customize.datasetName() and customize.datasetName().count("GJet")):
+if not customize.processId == "Data": #and not ((customize.datasetName() and customize.datasetName().count("DiPho")))  and not (customize.datasetName() and customize.datasetName().count("GJet"))
     mH = None
     ldset = ""
     if customize.datasetName():
@@ -605,8 +609,9 @@ else:
 print("-----------------------------------------------PATH-p----------------------------------")
 print(process.p)
 fc.addObservables(process, process.tagsDumper, customize.processId, process.flashggTagSequence)
-print("-----------------------------------------------PATH-pfid-----------------------------------")
-print(process.pfid)
+if is_signal:
+    print("-----------------------------------------------PATH-pfid-----------------------------------")
+    print(process.pfid)
 
 
 if customize.recalculatePDFWeights and is_signal and not customize.processId.count("bbh"):
@@ -630,7 +635,7 @@ printSystematicInfo(process)
 
 # Detailed tag interpretation information printout (blinded)
 process.flashggTagSorter.StoreOtherTagInfo = True
-process.flashggTagSorter.BlindedSelectionPrintout = True
+process.flashggTagSorter.BlindedSelectionPrintout = False
 
 if customize.verboseTagDump:
     process.flashggTagSorter.Debug = True
