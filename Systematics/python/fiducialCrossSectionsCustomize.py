@@ -743,7 +743,7 @@ def addRecoGlobalVariables(process,dumper,tagSequence,tagGetter=""):
     
     
 # ----------------------------------------------------------------------------------------------------------------
-def addGenOnlyAnalysis(process,processId,tagSequence,acceptance,tagList,systlabels,pdfWeights=None,recoJetCollections=None,mH=None,filterEvents=True): #NNLOPSreweight=False, genToReweight=None
+def addGenOnlyAnalysis(process,processId,tagSequence,acceptance,tagList,systlabels,pdfWeights=None,recoJetCollections=None,mH=None,filterEvents=True,dumpGenWeight=True): #NNLOPSreweight=False, genToReweight=None
     import itertools
     import flashgg.Taggers.dumperConfigTools as cfgTools
     
@@ -838,7 +838,8 @@ def addGenOnlyAnalysis(process,processId,tagSequence,acceptance,tagList,systlabe
                          nPdfWeights=nPdfWeights,
                          nAlphaSWeights=nAlphaSWeights,
                          nScaleWeights=nScaleWeights,
-                         splitPdfByStage0Bin=False
+                         splitPdfByStage0Bin=False,
+                         dumpGenWeight=dumpGenWeight
                          )
 
     for tag in tagList:
@@ -853,7 +854,8 @@ def addGenOnlyAnalysis(process,processId,tagSequence,acceptance,tagList,systlabe
                                  nPdfWeights=nPdfWeights,
                                  nAlphaSWeights=nAlphaSWeights,
                                  nScaleWeights=nScaleWeights,
-                                 splitPdfByStage0Bin=False
+                                 splitPdfByStage0Bin=False,
+                                 dumpGenWeight=dumpGenWeight
                                  )
             
             
