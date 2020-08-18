@@ -1,0 +1,12 @@
+{
+    "processes" : {
+        "Data" : [
+            "/SingleElectron/alesauva-UL2017-10_6_4-v0-Run2017B-09Aug2019_UL2017-v1-8940b7b9416f1cbf6fbb86981f4883ea/USER",
+	    "/SingleElectron/alesauva-UL2017-10_6_4-v0-Run2017C-09Aug2019_UL2017-v1-c086301171e46d9c80ca640d553ab2cd/USER",
+	    "/SingleElectron/alesauva-UL2017-10_6_4-v0-Run2017D-09Aug2019_UL2017-v1-c086301171e46d9c80ca640d553ab2cd/USER",
+	    "/SingleElectron/alesauva-UL2017-10_6_4-v0-Run2017E-09Aug2019_UL2017-v1-c086301171e46d9c80ca640d553ab2cd/USER",
+	    "/SingleElectron/alesauva-UL2017-10_6_4-v0-Run2017F-09Aug2019_UL2017_rsb-v2-c086301171e46d9c80ca640d553ab2cd/USER"
+        ]
+    },
+    "cmdLine" : "metaDataSrc=flashgg campaign=Era2017_legacy_v1 trigger=HLT_Ele35_WPTight_Gsf_v* lumiMask=/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/Legacy_2017/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2017_legacy_v1.json"
+}
