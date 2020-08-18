@@ -1,0 +1,8 @@
+{
+    "processes" : {
+        "DYJetsToLL_amcatnloFXFX" : [
+            "/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/alesauva-UL2017-10_6_4-v2-RunIISummer19UL17MiniAOD-106X_mc2017_realistic_v6-v2-c148a697ba5b08ec1e824b73db044236/USER"
+        ]
+    },
+    "cmdLine" : "metaDataSrc=flashgg campaign=Era2017_legacy_v1 trigger=HLT_Ele35_WPTight_Gsf_v* lumiMask=/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/Legacy_2017/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2017_legacy_v1.json"
+}
