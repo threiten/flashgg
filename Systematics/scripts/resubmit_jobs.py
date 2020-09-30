@@ -98,7 +98,7 @@ def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=F
       elif "queue" in line and not reqCpus: print ("RequestCpus = 2\nqueue %d "%(len(runJobs_dict[cluster]))),
       elif "max_retries" in line: print("max_retries = 2\n"),
       elif "RequestCpus" in line:
-        print("RequestCpus = 2\n")
+        print("RequestCpus = 8\n")
       else : print line,
     for line in fileinput.input("%s/%s.sh"%(dir,cluster), inplace=True):
       if  "declare -a jobIdsMap" in line : print ("declare -a jobIdsMap=(%s)\n"%(jobs_to_run)),

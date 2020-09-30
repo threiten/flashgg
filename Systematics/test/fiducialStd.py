@@ -284,6 +284,11 @@ if is_signal:
             jetsystlabels.append("JEC%s01sigma" % direction)
             jetsystlabels.append("JER%s01sigma" % direction)
             jetsystlabels.append("PUJIDShift%s01sigma" % direction)
+            if customize.doGranularJEC:
+                for sourceName in customize.metaConditions['flashggJetSystematics']['listOfSources']:
+                    jetsystlabels.append("JEC%s%s01sigma" % (str(sourceName),direction))
+            if customize.metaConditions['flashggJetSystematics']['doHEMuncertainty']:
+                jetsystlabels.append("JetHEM%s01sigma" % direction)
             if customize.doBJetsAndMET:
                 metsystlabels.append("metJecUncertainty%s01sigma" % direction)
                 metsystlabels.append("metJerUncertainty%s01sigma" % direction)
@@ -384,7 +389,7 @@ print(variablesToUse)
 tagList = [["SigmaMpTTag", 1]]
 
 
-fc.bookCompositeObjects(process, customize.processId,
+fc.bookCompositeObjects(process, customize, customize.processId,
                         process.flashggTagSequence)
 cloneTagSequenceForEachSystematic(
     process, systlabels, phosystlabels, metsystlabels, jetsystlabels, jetSystematicsInputTags)
@@ -605,7 +610,7 @@ if not customize.processId == "Data": #and not ((customize.datasetName() and cus
     #             #                print "datasetName contains powheg --> gen to be reweighted is powheg"
     #         genToReweight = "powheg"
     print 'pdfWeights in worspaceStd'
-    fc.addGenOnlyAnalysis(process, customize.processId, process.flashggTagSequence,
+    fc.addGenOnlyAnalysis(process, customize, customize.processId, process.flashggTagSequence,
                           customize.acceptance, tagList, systlabels,
                           pdfWeights=(dumpPdfWeights, nPdfWeights,nAlphaSWeights, nScaleWeights),
                           mH=mH, filterEvents=customize.filterNonAcceptedEvents)

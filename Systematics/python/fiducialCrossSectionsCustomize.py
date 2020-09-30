@@ -155,7 +155,7 @@ def getRecoVariables(isRecoTag=True):
     return dipho+legs
 
 # ----------------------------------------------------------------------------------------------------------------
-def bookHadronicActivityProducers(process,processId,tagSequence,recoDiphotons,recoDiphotonTags,genDiphotons,recoJetCollections=None,genJetCollection="slimmedGenJets",genBJetCollection="flashggGenJetsExtra"):
+def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiphotons,recoDiphotonTags,genDiphotons,recoJetCollections=None,genJetCollection="slimmedGenJets",genBJetCollection="flashggGenJetsExtra"):
     
     if not recoJetCollections:
         from flashgg.Taggers.flashggTags_cff import UnpackedJetCollectionVInputTag
@@ -247,8 +247,8 @@ def bookHadronicActivityProducers(process,processId,tagSequence,recoDiphotons,re
 
         ###Btag reco, bflavor jets
         if doBJetsAndMET:
-        	from flashgg.MicroAOD.flashggJets_cfi import flashggBTag
-        	from flashgg.Taggers.flashggTags_cff import bDiscriminator80XReReco
+        	# from flashgg.MicroAOD.flashggJets_cfi import flashggDeepFlavourb, flashggDeepFlavourbb, flashggDeepFlavourlepb
+        	# from flashgg.Taggers.flashggTags_cff import bDiscriminatorDeepJet102X
 ##        	if( not hasattr(process,"filteredRecoJetsBflavorMediumEta2p5%d" % icoll) ): 
 ##        	    setattr(process,"filteredRecoJetsBflavorMediumEta2p5%d" % icoll,cms.EDFilter("FlashggJetCandidateSelector",
 ##        	                                                                            src=coll,
@@ -265,10 +265,13 @@ def bookHadronicActivityProducers(process,processId,tagSequence,recoDiphotons,re
         	
         	
 #####Tig	ht b-jets
+                deepFlavourb = "mini_pfDeepFlavourJetTags:probb"
+                deepFlavourbb = "mini_pfDeepFlavourJetTags:probbb"
+                deepFlavourlepb = "mini_pfDeepFlavourJetTags:problepb"
         	if( not hasattr(process,"filteredRecoJetsBflavorTightEta2p5%d" % icoll) ): 
         	    setattr(process,"filteredRecoJetsBflavorTightEta2p5%d" % icoll,cms.EDFilter("FlashggJetCandidateSelector",
         	                                                                            src=coll,
-        	                                                                            cut=cms.string("pt>%f && abs(eta)<2.5 && passesJetID('Loose') && bDiscriminator( '%s' ) > %f " % (jetPtCut, flashggBTag, bDiscriminator80XReReco[2])),
+                                                                                            cut=cms.string("pt>%f && abs(eta)<2.5 && passesJetID('Loose') && ((bDiscriminator( '%s' ) + bDiscriminator( '%s' ) + bDiscriminator( '%s' )) > %f) " % (jetPtCut, deepFlavourb, deepFlavourbb, deepFlavourlepb, options.metaConditions['bTagSystematics']['bDiscriminatorValueTight_pfDeepJet'])),
         	
         	
         	                                                                            ) )
@@ -508,7 +511,9 @@ def addJetGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
 #    variables += getJetKinVariables(pre,post,["pt[667,0.0,10005.0]","eta[50,-5.0,5.0]","rapidity[50,0.0,10.0]"],5)
     if pre =="reco":
         variables += getJetKinVariables(pre,post,["pt","eta","rapidity","phi","px","py","pz", "energy", "numberOfDaughters[200,-0.5,199.5]", "puJetIdMVA", ],6, getter)
-
+        if post == "BflavorTight2p5":
+            variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
+            variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))
 #        print  ("%sJet%sBdiscriminant0 := ? %snumberOfDaughters > 0 ? %sdaughter(0).bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -999" % (pre,  post,  getter,  getter))
 #        variables+=[("%sJet%sBdiscriminant0 := ? %snumberOfDaughters > 0 ? %sdaughter(0).bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -999" % (pre,  post,  getter,  getter))]
     else:
@@ -542,7 +547,8 @@ def addBflavorJetGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=
 #        variables += getJetKinVariables(pre,post,["pt","eta","rapidity","phi","px","py","pz", "energy", "cand().hasBottom", "cand().hasBquark", "cand().deltaRBquarkGenJet", "cand().jetPtOverBquarkPt", "numberOfDaughters"],6, getter)
         variables += getJetKinVariables(pre,post,["pt","eta","rapidity","phi","px","py","pz", "energy", "numberOfDaughters"],6, getter)
 #    variables += [ "%(pre)sBjetHasBottom%(post)s0 := ? %(getter)snumberOfDaughters > 0 ? %(getter)sdaughter(0).hasBottom : -999" % locals() ]
-    # print "jet global variables"
+
+    # print "B jet global variables"
     # print variables
 
 
@@ -743,7 +749,7 @@ def addRecoGlobalVariables(process,dumper,tagSequence,tagGetter=""):
     
     
 # ----------------------------------------------------------------------------------------------------------------
-def addGenOnlyAnalysis(process,processId,tagSequence,acceptance,tagList,systlabels,pdfWeights=None,recoJetCollections=None,mH=None,filterEvents=True,dumpGenWeight=True): #NNLOPSreweight=False, genToReweight=None
+def addGenOnlyAnalysis(process,options,processId,tagSequence,acceptance,tagList,systlabels,pdfWeights=None,recoJetCollections=None,mH=None,filterEvents=True,dumpGenWeight=True): #NNLOPSreweight=False, genToReweight=None
     import itertools
     import flashgg.Taggers.dumperConfigTools as cfgTools
     
@@ -801,7 +807,7 @@ def addGenOnlyAnalysis(process,processId,tagSequence,acceptance,tagList,systlabe
     process.genSequence = cms.Sequence(process.flashggTaggedGenDiphotons)
     
     ## bookHadronicActivityProducers(process,processId,"flashggTagSorter","flashggTaggedGenDiphotons",recoJetCollections,genJetCollection="slimmedGenJets")
-    bookHadronicActivityProducers(process,processId,tagSequence,"flashggDiPhotonSystematics",process.flashggSigmaMoMpToMTag,"flashggTaggedGenDiphotons",recoJetCollections,genJetCollection="slimmedGenJets") ##FIXME 
+    bookHadronicActivityProducers(process,options,processId,tagSequence,"flashggDiPhotonSystematics",process.flashggSigmaMoMpToMTag,"flashggTaggedGenDiphotons",recoJetCollections,genJetCollection="slimmedGenJets") ##FIXME 
     addGenGlobalVariables(process,process.genDiphotonDumper,process.genSequence)
     addRecoGlobalVariables(process,process.genDiphotonDumper,tagSequence,tagGetter="tag()")
 
@@ -863,9 +869,9 @@ def addGenOnlyAnalysis(process,processId,tagSequence,acceptance,tagList,systlabe
     process.pfid = cms.Path(process.genFilter*process.genSequence*process.genDiphotonDumper)
     
 
-def bookCompositeObjects(process,processId,tagSequence,recoJetCollections=None):
+def bookCompositeObjects(process, options, processId,tagSequence,recoJetCollections=None):
     ## bookHadronicActivityProducers(process,processId,"flashggTagSorter","flashggTaggedGenDiphotons",recoJetCollections,genJetCollection="slimmedGenJets")
-    bookHadronicActivityProducers(process,processId,tagSequence,"flashggDiPhotonSystematics",process.flashggSigmaMoMpToMTag,"flashggTaggedGenDiphotons",recoJetCollections,genJetCollection="slimmedGenJets")
+    bookHadronicActivityProducers(process,options,processId,tagSequence,"flashggDiPhotonSystematics",process.flashggSigmaMoMpToMTag,"flashggTaggedGenDiphotons",recoJetCollections,genJetCollection="slimmedGenJets")
 
 def addObservables(process, dumper, processId, tagSequence, recoJetCollections=None):
     addRecoGlobalVariables(process,dumper,tagSequence)
