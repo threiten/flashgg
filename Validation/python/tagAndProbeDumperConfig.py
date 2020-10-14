@@ -18,7 +18,7 @@ def makeOneLegInputs(label, obj, inputs):
     return out
 
 
-def getConfig(extended=False, dumpShowerShapes=False, dumpClusterShapes=False, dumpPfIsos=False, dumpEgIsos=False, dumpTag=True, trackClIsoCorrections=False):
+def getConfig(extended=False, dumpShowerShapes=False, dumpClusterShapes=False, dumpPfIsos=False, dumpEgIsos=False, dumpTag=True, trackClIsoCorrections=False, doSigEoESyst=False):
 
     minDiEleVars = ["mass := diPhoton.mass",
                     " pt := diPhoton.pt",
@@ -113,6 +113,20 @@ def getConfig(extended=False, dumpShowerShapes=False, dumpClusterShapes=False, d
     probeCorrClVars = ["probePhiWidth := ? getProbe.hasUserFloat('phiWidth') ? getProbe.userFloat('phiWidth') : -999",
                        "probeEtaWidth := ? getProbe.hasUserFloat('etaWidth') ? getProbe.userFloat('etaWidth') : -999"]
 
+    SigEoESystVars = ["probeEnergyScaleUp01Sigma := ? hasUserFloat('probeEnergyScaleUp01Sigma') ? userFloat('probeEnergyScaleUp01Sigma') : -99",
+                      "probeEnergyScaleDown01Sigma := ? hasUserFloat('probeEnergyScaleDown01Sigma') ? userFloat('probeEnergyScaleDown01Sigma') : -99",
+                      "probeEnergySmearingUp01Sigma := ? hasUserFloat('probeEnergySmearingUp01Sigma') ? userFloat('probeEnergySmearingUp01Sigma') : -99",
+                      "probeEnergySmearingDown01Sigma := ? hasUserFloat('probeEnergySmearingDown01Sigma') ? userFloat('probeEnergySmearingDown01Sigma') : -99",
+                      "probeSigEOverEScaleUp01Sigma := ? hasUserFloat('probeSigEOverEScaleUp01Sigma') ? userFloat('probeSigEOverEScaleUp01Sigma') : -99",
+                      "probeSigEOverEScaleDown01Sigma := ? hasUserFloat('probeSigEOverEScaleDown01Sigma') ? userFloat('probeSigEOverEScaleDown01Sigma') : -99",
+                      "probeSigEOverESmearingUp01Sigma := ? hasUserFloat('probeSigEOverESmearingUp01Sigma') ? userFloat('probeSigEOverESmearingUp01Sigma') : -99",
+                      "probeSigEOverESmearingDown01Sigma := ? hasUserFloat('probeSigEOverESmearingDown01Sigma') ? userFloat('probeSigEOverESmearingDown01Sigma') : -99",
+                      "probeSigEScaleUp01Sigma := ? hasUserFloat('probeSigEScaleUp01Sigma') ? userFloat('probeSigEScaleUp01Sigma') : -99",
+                      "probeSigEScaleDown01Sigma := ? hasUserFloat('probeSigEScaleDown01Sigma') ? userFloat('probeSigEScaleDown01Sigma') : -99",
+                      "probeSigESmearingUp01Sigma := ? hasUserFloat('probeSigESmearingUp01Sigma') ? userFloat('probeSigESmearingUp01Sigma') : -99",
+                      "probeSigESmearingDown01Sigma := ? hasUserFloat('probeSigESmearingDown01Sigma') ? userFloat('probeSigESmearingDown01Sigma') : -99",
+                      "probeSigE := ? hasUserFloat('probeSigE') ? userFloat('probeSigE') : -99"]
+    
     singleEleVars = minSingleEleVars
     singleEleViewVars = minSingleEleViewVars
     if extended:
@@ -143,6 +157,9 @@ def getConfig(extended=False, dumpShowerShapes=False, dumpClusterShapes=False, d
     if trackClIsoCorrections:
         variables.extend(probeUncorrClIsos + probeCorrClVars)
 
+    if doSigEoESyst:
+        variables.extend(SigEoESystVars)
+
     return variables
 
 
@@ -156,3 +173,5 @@ def getCustomConfig(key, dumpTag=True):
         return getConfig(extended=True, dumpShowerShapes=True, dumpPfIsos=True, dumpTag=dumpTag, trackClIsoCorrections=True)
     elif key == 'complete':
         return getConfig(extended=True, dumpShowerShapes=True, dumpClusterShapes=True, dumpPfIsos=True, dumpEgIsos=True, dumpTag=dumpTag, trackClIsoCorrections=True)
+    elif key == 'sigEoverESyst':
+        return getConfig(extended=True, dumpShowerShapes=True, dumpClusterShapes=True, dumpPfIsos=True, dumpEgIsos=True, dumpTag=dumpTag, trackClIsoCorrections=True, doSigEoESyst=True)

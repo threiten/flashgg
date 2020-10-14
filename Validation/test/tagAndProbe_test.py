@@ -45,6 +45,12 @@ customize.options.register("doPhoIdInputsCorrections",
                            VarParsing.VarParsing.varType.bool,
                            "doPhoIdInputsCorrections"
                            )
+customize.options.register("doSigEOverESystematic",
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           "doSigEOverESystematic"
+                           )
 
 
 customize.setDefault("maxEvents", 10000)
@@ -79,15 +85,15 @@ import flashgg.Validation.tagAndProbeDumperConfig as dumpCfg
 
 # ----------------------------------------------------------------------------------------------------
 # Run shower shape and isolation corrections
+process.load("flashgg.Taggers.flashggDifferentialPhoIdInputsCorrection_cfi")
+import flashgg.Taggers.flashggDifferentialPhoIdInputsCorrection_cfi as phoIdInp_Corr
+phoIdInp_Corr.setup_flashggDifferentialPhoIdInputsCorrection( process, customize.metaConditions )
 
-if customize.options.doPhoIdInputsCorrections:
+if not customize.options.doPhoIdInputsCorrections:
     
-    process.load("flashgg.Taggers.flashggDifferentialPhoIdInputsCorrection_cfi")
-    import flashgg.Taggers.flashggDifferentialPhoIdInputsCorrection_cfi as phoIdInp_Corr
-    phoIdInp_Corr.setup_flashggDifferentialPhoIdInputsCorrection( process, customize.metaConditions )
-    # process.flashggDifferentialPhoIdInputsCorrection = flashggDifferentialPhoIdInputsCorrection.clone()
-    # process.flashggDifferentialPhoIdInputsCorrection.correctIsolations = False
-    # process.flashggDifferentialPhoIdInputsCorrection.reRunRegression = True
+    process.flashggDifferentialPhoIdInputsCorrection.correctIsolations = False
+    process.flashggDifferentialPhoIdInputsCorrection.reRunRegression = False
+    process.flashggDifferentialPhoIdInputsCorrection.correctShowerShapes = False
 
 
 # ----------------------------------------------------------------------------------------------------
@@ -117,6 +123,7 @@ sysmodule = importlib.import_module(
     "flashgg.Systematics."+customize.metaConditions["flashggDiPhotonSystematics"])
 systModules2D = cms.VPSet()
 systModules = cms.VPSet()
+systModulesSigEOverE = cms.VPSet()
 
 if customize.processId == "Data":
     systModules.append(sysmodule.MCScaleHighR9EB_EGM)
@@ -142,6 +149,27 @@ else:
 
     for module in systModules:
         module.ApplyCentralValue = cms.bool(False)
+
+    if customize.options.doSigEOverESystematic:
+        systModules.append(sysmodule.SigmaEOverESmearing_EGM)
+        systModules[-1].NSigmas = cms.vint32(-1,1)
+
+# ----------------------------------------------------------------------------------------------------
+if customize.options.doSigEOverESystematic:
+
+    MCScaleSEoESyst_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+                                    MethodName = cms.string("FlashggDiPhotonFromPhoton"),
+                                    Label = cms.string("MCScaleSEoESyst"),
+                                    NSigmas = cms.vint32(-1,1),
+                                    OverallRange = cms.string("abs(superCluster.eta)<=2.5"),
+                                    BinList = sysmodule.emptyBins,
+                                    CorrectionFile = sysmodule.scalesAndSmearingsPrefix,
+                                    ApplyCentralValue = cms.bool(False),
+                                    UncertaintyBitMask = cms.string("011"),#cms.string("110"),
+                                    ExaggerateShiftUp = cms.bool(False),
+                                    Debug = cms.untracked.bool(False)
+    )
+    systModules.append(MCScaleSEoESyst_EGM)
 
 # ----------------------------------------------------------------------------------------------------
 # Do HLT matching and electron matching
@@ -173,10 +201,7 @@ systModules.append(
 process.flashggDiPhotonSystematics = flashggDiPhotonSystematics
 process.flashggDiPhotonSystematics.SystMethods = systModules
 process.flashggDiPhotonSystematics.SystMethods2D = systModules2D
-if customize.options.doPhoIdInputsCorrections:
-    process.flashggDiPhotonSystematics.src = "flashggDifferentialPhoIdInputsCorrection"
-else:
-    process.flashggDiPhotonSystematics.src = "flashggDiPhotons"
+process.flashggDiPhotonSystematics.src = "flashggDifferentialPhoIdInputsCorrection"
 
 # ----------------------------------------------------------------------------------------------------
 # Configure FlashggTagAndProbe Producer
@@ -184,6 +209,14 @@ else:
 process.flashggTagAndProbe = flashggTagAndProbe
 process.flashggTagAndProbe.diphotonsSrc = cms.InputTag(
     "flashggDiPhotonSystematics")
+process.flashggTagAndProbe.diphotonsScaleUpSrc = cms.InputTag(
+    "flashggDiPhotonSystematics", "MCScaleSEoESystUp01sigma")
+process.flashggTagAndProbe.diphotonsScaleDownSrc = cms.InputTag(
+    "flashggDiPhotonSystematics", "MCScaleSEoESystDown01sigma")
+process.flashggTagAndProbe.diphotonsSmearingUpSrc = cms.InputTag(
+    "flashggDiPhotonSystematics", "SigmaEOverESmearingUp01sigma")
+process.flashggTagAndProbe.diphotonsSmearingDownSrc = cms.InputTag(
+    "flashggDiPhotonSystematics", "SigmaEOverESmearingDown01sigma")
 process.flashggTagAndProbe.tagSelection = "{} && pt > 40 && (?hasUserCand('eleMatch')?userCand('eleMatch').passTightId:0) && hasPixelSeed && egChargedHadronIso < 20 && egChargedHadronIso/pt < 0.3".format(
     matchTriggerPaths)
 
@@ -198,7 +231,11 @@ process.flashggTagAndProbe.idSelection = cms.PSet(
 # ----------------------------------------------------------------------------------------------------
 # Configure tagAndProbeDumper
 
-variables = dumpCfg.getCustomConfig('complete')
+if customize.options.doSigEOverESystematic:
+    variables = dumpCfg.getCustomConfig('sigEoverESyst')
+else:
+    variables = dumpCfg.getCustomConfig('complete')
+print('Variables: ')
 print(variables)
 
 from flashgg.Validation.tagAndProbeDumper_cfi import tagAndProbeDumper
@@ -220,13 +257,8 @@ tnp_sequence = cms.Sequence(flashggTagAndProbe+tagAndProbeDumper)
 # ----------------------------------------------------------------------------------------------------
 # Schedule process
 
-
-if customize.options.doPhoIdInputsCorrections:
-    process.p = cms.Path(
-        process.flashggDifferentialPhoIdInputsCorrection * process.flashggIdentifiedElectrons *
-        process.flashggDiPhotonSystematics*tnp_sequence)
-else:
-    process.p = cms.Path(process.flashggIdentifiedElectrons *
-                         process.flashggDiPhotonSystematics*tnp_sequence)
+process.p = cms.Path(
+    process.flashggDifferentialPhoIdInputsCorrection * process.flashggIdentifiedElectrons *
+    process.flashggDiPhotonSystematics*tnp_sequence)
 
 customize(process)

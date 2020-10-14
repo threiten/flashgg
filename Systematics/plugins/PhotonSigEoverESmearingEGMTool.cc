@@ -48,7 +48,11 @@ namespace flashgg {
         std::string result;
         if( syst_value == 0 ) {
             result = Form( "%s", label().c_str() );
+        } else {
+            if( syst_value > 0 ) { result = Form( "%sUp%.2dsigma", label().c_str(), syst_value ); }
+            if( syst_value < 0 ) { result = Form( "%sDown%.2dsigma", label().c_str(), -1 * syst_value ); }
         }
+        std::cout << "Shift label SigEOverE smearing: " << result << std::endl;
         return result;
     }
     
@@ -64,7 +68,7 @@ namespace flashgg {
             
             // the combination of central value + NSigma * sigma is already
             // computed by getSmearingSigma(...)
-            auto sigma = scaler_.smearingSigma(run_number_, y.et(), y.superCluster()->eta(), y.full5x5_r9(), gain, 0, 0);// never apply systematic shift
+            auto sigma = scaler_.smearingSigma(run_number_, y.et(), y.superCluster()->eta(), y.full5x5_r9(), gain, ((float)syst_shift), 0.);
 
             if ( sigma < 0. || sigma > 1. ) {
                 throw cms::Exception("SmearingLogic") << " sigmaEOverE is going to be smeared by " << sigma << " which sounds implausible (allowed: 0-1)";

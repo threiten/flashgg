@@ -38,11 +38,39 @@ namespace flashgg {
         //---FW methods
         void produce( Event &, const EventSetup & ) override;
 
+        float getProbeEnergy(Ptr<DiPhotonCandidate>, TagAndProbeCandidate &);
+        float getProbeSigEOverE(Ptr<DiPhotonCandidate>, TagAndProbeCandidate &);
+        float getProbeSigE(Ptr<DiPhotonCandidate>, TagAndProbeCandidate &);
+
         //---data
         EDGetTokenT<View<DiPhotonCandidate> > diphotonsToken_;
         Handle<View<DiPhotonCandidate> > diphotonsHandle_;
         EDGetTokenT<vector<reco::GenParticle> > genPartToken_;
         Handle<vector<reco::GenParticle> > genPartHandle_;
+
+        //---scale up
+        EDGetTokenT<View<DiPhotonCandidate> > diphotonsScaleUpToken_;
+        Handle<View<DiPhotonCandidate> > diphotonsScaleUpHandle_;
+        EDGetTokenT<vector<reco::GenParticle> > genPartScaleUpToken_;
+        Handle<vector<reco::GenParticle> > genPartScaleUpHandle_;
+
+        //---scale down
+        EDGetTokenT<View<DiPhotonCandidate> > diphotonsScaleDownToken_;
+        Handle<View<DiPhotonCandidate> > diphotonsScaleDownHandle_;
+        EDGetTokenT<vector<reco::GenParticle> > genPartScaleDownToken_;
+        Handle<vector<reco::GenParticle> > genPartScaleDownHandle_;
+
+        //---smearing up
+        EDGetTokenT<View<DiPhotonCandidate> > diphotonsSmearingUpToken_;
+        Handle<View<DiPhotonCandidate> > diphotonsSmearingUpHandle_;
+        EDGetTokenT<vector<reco::GenParticle> > genPartSmearingUpToken_;
+        Handle<vector<reco::GenParticle> > genPartSmearingUpHandle_;
+
+        //---smearing down
+        EDGetTokenT<View<DiPhotonCandidate> > diphotonsSmearingDownToken_;
+        Handle<View<DiPhotonCandidate> > diphotonsSmearingDownHandle_;
+        EDGetTokenT<vector<reco::GenParticle> > genPartSmearingDownToken_;
+        Handle<vector<reco::GenParticle> > genPartSmearingDownHandle_;
 
         //---options
         int maxDiphotons_;
@@ -70,7 +98,11 @@ namespace flashgg {
     //---standard
     TagAndProbeProducer::TagAndProbeProducer( const ParameterSet & pSet):
         diphotonsToken_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "diphotonsSrc" ) ) ),
-        genPartToken_( consumes<vector<reco::GenParticle> >( pSet.getParameter<InputTag> ( "genParticlesSrc" ) ) ),        
+        genPartToken_( consumes<vector<reco::GenParticle> >( pSet.getParameter<InputTag> ( "genParticlesSrc" ) ) ),
+        diphotonsScaleUpToken_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "diphotonsScaleUpSrc" ) ) ),
+        diphotonsScaleDownToken_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "diphotonsScaleDownSrc" ) ) ),
+        diphotonsSmearingUpToken_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "diphotonsSmearingUpSrc" ) ) ),
+        diphotonsSmearingDownToken_( consumes<View<DiPhotonCandidate> >( pSet.getParameter<InputTag> ( "diphotonsSmearingDownSrc" ) ) ),
         maxDiphotons_( pSet.getParameter<int> ( "maxDiphotons" ) ),        
         tagSelector_( pSet.getParameter<string> ( "tagSelection" ) ),
         probeSelector_( pSet.getParameter<string> ( "probeSelection" ) ),
@@ -80,17 +112,112 @@ namespace flashgg {
         produces<vector<TagAndProbeCandidate> >();
     }
 
+    float TagAndProbeProducer::getProbeEnergy( Ptr<DiPhotonCandidate> variedDiphoton, TagAndProbeCandidate & cand )
+    {
+        auto lead = variedDiphoton->leadingView();
+        auto sublead = variedDiphoton->subLeadingView();
+        auto leadingPhoton = *lead->photon();
+        auto subLeadingPhoton = *sublead->photon();
+        
+        if( reco::deltaR(*cand.getProbe(), leadingPhoton) < 0.3)
+            {
+                return leadingPhoton.energy();
+            }
+        if( reco::deltaR(*cand.getProbe(), subLeadingPhoton) < 0.3)
+            {
+                return subLeadingPhoton.energy();
+            }
+
+        return -999.;
+    }
+
+    float TagAndProbeProducer::getProbeSigEOverE( Ptr<DiPhotonCandidate> variedDiphoton, TagAndProbeCandidate & cand )
+    {
+        auto lead = variedDiphoton->leadingView();
+        auto sublead = variedDiphoton->subLeadingView();
+        auto leadingPhoton = *lead->photon();
+        auto subLeadingPhoton = *sublead->photon();
+
+        if( reco::deltaR(*cand.getProbe(), leadingPhoton) < 0.3)
+            {
+                return leadingPhoton.sigEOverE();
+            }
+        if( reco::deltaR(*cand.getProbe(), subLeadingPhoton) < 0.3)
+            {
+                return subLeadingPhoton.sigEOverE();
+            }
+
+        return -999.;
+    }
+
+    float TagAndProbeProducer::getProbeSigE( Ptr<DiPhotonCandidate> variedDiphoton, TagAndProbeCandidate & cand)
+    {
+        auto lead = variedDiphoton->leadingView();
+        auto sublead = variedDiphoton->subLeadingView();
+        auto leadingPhoton = *lead->photon();
+        auto subLeadingPhoton = *sublead->photon();
+
+        if( reco::deltaR(*cand.getProbe(), leadingPhoton) < 0.3)
+            {
+                return leadingPhoton.getCorrectedEnergyError(leadingPhoton.getCandidateP4type());
+            }
+        if( reco::deltaR(*cand.getProbe(), subLeadingPhoton) < 0.3)
+            {
+                return subLeadingPhoton.getCorrectedEnergyError(subLeadingPhoton.getCandidateP4type());
+            }
+
+        return -999.;
+    }
+
     //---FW produce method
     void TagAndProbeProducer::produce( Event & event, const EventSetup & setup )
     {
         //---input 
         event.getByToken( diphotonsToken_, diphotonsHandle_ );
         auto diphotons = *diphotonsHandle_.product();
+
+        View<DiPhotonCandidate> diphotonsScaleUp;
+        View<DiPhotonCandidate> diphotonsScaleDown;
+        View<DiPhotonCandidate> diphotonsSmearingUp;
+        View<DiPhotonCandidate> diphotonsSmearingDown;
+        
         vector<reco::GenParticle> genParticles;
         if( ! event.isRealData() )
         {
             event.getByToken( genPartToken_, genPartHandle_ );
             genParticles = *genPartHandle_.product();
+            event.getByToken( diphotonsScaleUpToken_, diphotonsScaleUpHandle_ );
+            event.getByToken( diphotonsScaleDownToken_, diphotonsScaleDownHandle_ );
+            event.getByToken( diphotonsSmearingUpToken_, diphotonsSmearingUpHandle_ );
+            event.getByToken( diphotonsSmearingDownToken_, diphotonsSmearingDownHandle_ );
+            if( diphotonsScaleUpHandle_.isValid())
+                {
+                    diphotonsScaleUp = *diphotonsScaleUpHandle_.product();
+                }
+            else{
+                    std::cout << "Handle for diphotonScaleUp not valid !!" << std::endl;
+                }
+            if( diphotonsScaleDownHandle_.isValid())
+                {
+                    diphotonsScaleDown = *diphotonsScaleDownHandle_.product();
+                }
+            else{
+                    std::cout << "Handle for diphotonScaleDown not valid !!" << std::endl;
+                }
+            if( diphotonsSmearingUpHandle_.isValid())
+                {
+                    diphotonsSmearingUp = *diphotonsSmearingUpHandle_.product();
+                }
+            else{
+                    std::cout << "Handle for diphotonSmearingUp not valid !!" << std::endl;
+                }
+            if( diphotonsSmearingDownHandle_.isValid())
+                {
+                    diphotonsSmearingDown = *diphotonsSmearingDownHandle_.product();
+                }
+            else{
+                    std::cout << "Handle for diphotonSmearingDown not valid !!" << std::endl;
+                }
         }
 
         //---output collection
@@ -159,7 +286,32 @@ namespace flashgg {
                 for(auto& sel : idResults)
                     cand.addUserInt("probe_pass_"+sel.first, sel.second);
                 cand.addUserInt("tagGenMatch", leadGenMatch);
-                cand.addUserInt("probeGenMatch", subleadGenMatch);                
+                cand.addUserInt("probeGenMatch", subleadGenMatch);
+                cand.addUserFloat("probeSigE", cand.getProbe()->getCorrectedEnergyError(cand.getProbe()->getCandidateP4type()));
+                if( diphotonsScaleUpHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergyScaleUp01Sigma", getProbeEnergy(diphotonsScaleUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverEScaleUp01Sigma", getProbeSigEOverE(diphotonsScaleUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEScaleUp01Sigma", getProbeSigE(diphotonsScaleUp.ptrAt(iDP), cand));
+                    }
+                if( diphotonsScaleDownHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergyScaleDown01Sigma", getProbeEnergy(diphotonsScaleDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverEScaleDown01Sigma", getProbeSigEOverE(diphotonsScaleDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEScaleDown01Sigma", getProbeSigE(diphotonsScaleDown.ptrAt(iDP), cand));
+                    }
+                if( diphotonsSmearingUpHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergySmearingUp01Sigma", getProbeEnergy(diphotonsSmearingUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverESmearingUp01Sigma", getProbeSigEOverE(diphotonsSmearingUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigESmearingUp01Sigma", getProbeSigE(diphotonsSmearingUp.ptrAt(iDP), cand));
+                    }
+                if( diphotonsSmearingDownHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergySmearingDown01Sigma", getProbeEnergy(diphotonsSmearingDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverESmearingDown01Sigma", getProbeSigEOverE(diphotonsSmearingDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigESmearingDown01Sigma", getProbeSigE(diphotonsSmearingDown.ptrAt(iDP), cand));
+                    }
                 tnpColl_->push_back(cand);
             }
             if(tagSelector_(*sublead->photon()) && probeSelector_(*lead->photon()))
@@ -169,7 +321,32 @@ namespace flashgg {
                 for(auto& sel : idResults)
                     cand.addUserInt("probe_pass_"+sel.first, sel.second);                
                 cand.addUserInt("tagGenMatch", subleadGenMatch);
-                cand.addUserInt("probeGenMatch", leadGenMatch);                
+                cand.addUserInt("probeGenMatch", leadGenMatch);
+                cand.addUserFloat("probeSigE", cand.getProbe()->getCorrectedEnergyError(cand.getProbe()->getCandidateP4type()));
+                if( diphotonsScaleUpHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergyScaleUp01Sigma", getProbeEnergy(diphotonsScaleUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverEScaleUp01Sigma", getProbeSigEOverE(diphotonsScaleUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEScaleUp01Sigma", getProbeSigE(diphotonsScaleUp.ptrAt(iDP), cand));
+                    }
+                if( diphotonsScaleDownHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergyScaleDown01Sigma", getProbeEnergy(diphotonsScaleDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverEScaleDown01Sigma", getProbeSigEOverE(diphotonsScaleDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEScaleDown01Sigma", getProbeSigE(diphotonsScaleDown.ptrAt(iDP), cand));
+                    }
+                if( diphotonsSmearingUpHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergySmearingUp01Sigma", getProbeEnergy(diphotonsSmearingUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverESmearingUp01Sigma", getProbeSigEOverE(diphotonsSmearingUp.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigESmearingUp01Sigma", getProbeSigE(diphotonsSmearingUp.ptrAt(iDP), cand));
+                    }
+                if( diphotonsSmearingDownHandle_.isValid() )
+                    {
+                        cand.addUserFloat("probeEnergySmearingDown01Sigma", getProbeEnergy(diphotonsSmearingDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigEOverESmearingDown01Sigma", getProbeSigEOverE(diphotonsSmearingDown.ptrAt(iDP), cand));
+                        cand.addUserFloat("probeSigESmearingDown01Sigma", getProbeSigE(diphotonsSmearingDown.ptrAt(iDP), cand));
+                    }
                 tnpColl_->push_back(cand);
             }
         }
