@@ -52,7 +52,8 @@ def getConfig(extended=False, dumpShowerShapes=False, dumpClusterShapes=False, d
                         ("checkStatusFlag('kSaturated')", "IsSat"),
                         ("checkStatusFlag('kWeird')", "IsWeird"),
                         ("esEffSigmaRR", "sigmaRR"),
-                        ("hasUserCand('eleMatch')", "EleMatch")]
+                        ("hasUserCand('eleMatch')", "EleMatch"),
+                        ("superCluster.preshowerEnergy", "ScPreshowerEnergy")]
 
     singleEleShowerShapes = [("full5x5_sigmaIetaIeta", "SigmaIeIe"),
                              ("sipip", "CovarianceIpIp"),
