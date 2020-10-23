@@ -125,7 +125,22 @@ systModules2D = cms.VPSet()
 systModules = cms.VPSet()
 systModulesSigEOverE = cms.VPSet()
 
+if customize.options.doSigEOverESystematic:
+    systModules.append(sysmodule.SigmaEOverESmearing_EGM)
+
 if customize.processId == "Data":
+    
+    systModules.append(sysmodule.MCScaleHighR9EB_EGM)
+    systModules.append(sysmodule.MCScaleLowR9EB_EGM)
+    systModules.append(sysmodule.MCScaleHighR9EE_EGM)
+    systModules.append(sysmodule.MCScaleLowR9EE_EGM)
+    
+    for module in systModules[1:]:
+        module.ApplyCentralValue = cms.bool(True)
+
+else:
+
+    systModules[-1].NSigmas = cms.vint32(-1,1)
     systModules.append(sysmodule.MCScaleHighR9EB_EGM)
     systModules.append(sysmodule.MCScaleLowR9EB_EGM)
     systModules.append(sysmodule.MCScaleHighR9EE_EGM)
@@ -133,31 +148,16 @@ if customize.processId == "Data":
     # systModules.append(sysmodule.MCScaleGain6EB_EGM)
     # systModules.append(sysmodule.MCScaleGain1EB_EGM)
 
-    for module in systModules:
-        module.ApplyCentralValue = cms.bool(True)
-
-else:
-    systModules.append(sysmodule.MCScaleHighR9EB_EGM)
-    systModules.append(sysmodule.MCScaleLowR9EB_EGM)
-    systModules.append(sysmodule.MCScaleHighR9EE_EGM)
-    systModules.append(sysmodule.MCScaleLowR9EE_EGM)
-
     systModules2D.append(sysmodule.MCSmearHighR9EE_EGM)
     systModules2D.append(sysmodule.MCSmearLowR9EE_EGM)
     systModules2D.append(sysmodule.MCSmearHighR9EB_EGM)
     systModules2D.append(sysmodule.MCSmearLowR9EB_EGM)
-
-    for module in systModules:
+    
+    for module in systModules[1:]:
         module.ApplyCentralValue = cms.bool(False)
 
     if customize.options.doSigEOverESystematic:
-        systModules.append(sysmodule.SigmaEOverESmearing_EGM)
-        systModules[-1].NSigmas = cms.vint32(-1,1)
-
-# ----------------------------------------------------------------------------------------------------
-if customize.options.doSigEOverESystematic:
-
-    MCScaleSEoESyst_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
+        MCScaleSEoESyst_EGM = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScaleEGMTool"),
                                     MethodName = cms.string("FlashggDiPhotonFromPhoton"),
                                     Label = cms.string("MCScaleSEoESyst"),
                                     NSigmas = cms.vint32(-1,1),
@@ -168,8 +168,8 @@ if customize.options.doSigEOverESystematic:
                                     UncertaintyBitMask = cms.string("011"),#cms.string("110"),
                                     ExaggerateShiftUp = cms.bool(False),
                                     Debug = cms.untracked.bool(False)
-    )
-    systModules.append(MCScaleSEoESyst_EGM)
+        )
+        systModules.append(MCScaleSEoESyst_EGM)
 
 # ----------------------------------------------------------------------------------------------------
 # Do HLT matching and electron matching

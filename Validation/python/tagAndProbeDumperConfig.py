@@ -125,7 +125,9 @@ def getConfig(extended=False, dumpShowerShapes=False, dumpClusterShapes=False, d
                       "probeSigEScaleDown01Sigma := ? hasUserFloat('probeSigEScaleDown01Sigma') ? userFloat('probeSigEScaleDown01Sigma') : -99",
                       "probeSigESmearingUp01Sigma := ? hasUserFloat('probeSigESmearingUp01Sigma') ? userFloat('probeSigESmearingUp01Sigma') : -99",
                       "probeSigESmearingDown01Sigma := ? hasUserFloat('probeSigESmearingDown01Sigma') ? userFloat('probeSigESmearingDown01Sigma') : -99",
-                      "probeSigE := ? hasUserFloat('probeSigE') ? userFloat('probeSigE') : -99"]
+                      "probeSigE := ? hasUserFloat('probeSigE') ? userFloat('probeSigE') : -99",
+                      "probeUnsmearedSigEOverE := ? getProbe.hasUserFloat('unsmearedSigmaEoE') ? getProbe.userFloat('unsmearedSigmaEoE') : -99"
+    ]
     
     singleEleVars = minSingleEleVars
     singleEleViewVars = minSingleEleViewVars
