@@ -396,7 +396,7 @@ cloneTagSequenceForEachSystematic(
 
 # MUST be after tag sequence cloning
 process.flashggTagSorter.CreateNoTag = False
-process.flashggTagSorter.isGluonFusion = cms.bool(bool(customize.processId.count("ggh")))
+process.flashggTagSorter.isGluonFusion = cms.bool(bool(customize.datasetName().count("GluGlu")))
 process.flashggTagSorter.applyNNLOPSweight = cms.bool(customize.applyNNLOPSweight)
 
 from FWCore.ParameterSet.VarParsing import VarParsing
