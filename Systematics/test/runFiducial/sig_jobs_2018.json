@@ -1,0 +1,35 @@
+{
+    "processes" : {
+    	"InsideAcceptance_125"  :[
+	    [ "/GluGluHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-a56b881212d7e1373ea9751571b84b54/USER",
+	      { "args" :["acceptance=IN","outputFile=output_GluGluHToGG_M125_IA.root", "processIndex=11", "doSystematics=True"]}],
+	    ["/VBFHToGG_M125_13TeV_amcatnlo_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-9e48e061eb25395806bdefdfcc4171ae/USER",
+	     {"args" :["acceptance=IN","outputFile=output_VBFHToGG_M125_IA.root", "processIndex=12", "doSystematics=True"]}],
+	    ["/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-1304caed375f091a256618f37b82b587/USER",
+	     {"args": ["acceptance=IN","outputFile=output_VHToGG_M125_IA.root", "processIndex=13", "doSystematics=True"]}],
+	    ["/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-22826b4b3f0f74a98f5d2803cae2df21/USER",
+	     {"args" : ["acceptance=IN","outputFile=output_ttHJetToGG_M125_IA.root", "processIndex=14", "doSystematics=True"]}]
+	],
+	"InsideAcceptance_120" :[
+	    ["/GluGluHToGG_M120_TuneCP5_13TeV-amcatnloFXFX-pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-a56b881212d7e1373ea9751571b84b54/USER",
+	     {"args" : ["acceptance=IN","outputFile=output_GluGluHToGG_M120_IA.root", "processIndex=11"]}],
+	    ["/VBFHToGG_M120_13TeV_amcatnlo_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-9e48e061eb25395806bdefdfcc4171ae/USER",
+	     {"args": ["acceptance=IN","outputFile=output_VBFHToGG_M120_IA.root", "processIndex=12"]}],
+	    ["/VHToGG_M120_13TeV_amcatnloFXFX_madspin_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-3eb297b5e03726c458ef117cc7e864e5/USER",
+	     {"args": ["acceptance=IN","outputFile=output_VHToGG_M120_IA.root", "processIndex=13"]}],
+	    ["/ttHJetToGG_M120_13TeV_amcatnloFXFX_madspin_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-20759e3d08a46e955aa3c86f42facf93/USER",
+	     {"args": ["acceptance=IN","outputFile=output_ttHJetToGG_M120_IA.root", "processIndex=14"]}]
+	],
+	"InsideAcceptance_130" : [
+	    ["/GluGluHToGG_M130_TuneCP5_13TeV-amcatnloFXFX-pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-a56b881212d7e1373ea9751571b84b54/USER",
+	     {"args" : ["acceptance=IN","outputFile=output_GluGluHToGG_M130_IA.root", "processIndex=11"]}],
+	    ["/VBFHToGG_M130_13TeV_amcatnlo_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-9e48e061eb25395806bdefdfcc4171ae/USER",
+	     {"args" : ["acceptance=IN","outputFile=output_VBFHToGG_M130_IA.root", "processIndex=12"]}],
+	    ["/VHToGG_M130_13TeV_amcatnloFXFX_madspin_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-1304caed375f091a256618f37b82b587/USER",
+	     {"args" : ["acceptance=IN","outputFile=output_VHToGG_M130_IA.root", "processIndex=13"]}],
+	    ["/ttHJetToGG_M130_13TeV_amcatnloFXFX_madspin_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-22826b4b3f0f74a98f5d2803cae2df21/USER",
+	     {"args" : ["acceptance=IN","outputFile=output_ttHJetToGG_M130_IA.root", "processIndex=14"]}]
+	]
+    },
+    "cmdLine" : "campaign=Era2018_RR-17Sep2018_v2 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json doFiducial=True"
+}

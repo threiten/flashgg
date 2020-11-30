@@ -1,0 +1,9 @@
+{
+    "processes" : {
+    	"OutsideAcceptance_125"  :[
+	    [ "/GluGluHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-a56b881212d7e1373ea9751571b84b54/USER",
+	      { "args" :["acceptance=OUT","outputFile=output_GluGluHToGG_M125_OA.root", "processIndex=11"]}]
+	]
+    },
+    "cmdLine" : "campaign=Era2018_RR-17Sep2018_v2 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json doFiducial=True"
+}
