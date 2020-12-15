@@ -255,6 +255,7 @@ if is_signal:
     variablesToUse.append("sigmawv := diPhotonMVA().sigmawv")
     variablesToUse.append("vtxprob := diPhotonMVA().vtxprob")
     variablesToUse.append("CosPhi := diPhotonMVA().CosPhi")
+    variablesToUse.append("NNLOPSweight[1,-999999.,999999.] := getTheoryWeight(\"NNLOPS\")")
 #        variablesToUse.append("subleadmva := diPhotonMVA().subleadmva")
 
     if customize.doSystematics:
@@ -391,13 +392,14 @@ tagList = [["SigmaMpTTag", 1]]
 
 fc.bookCompositeObjects(process, customize, customize.processId,
                         process.flashggTagSequence)
+
+
+process.flashggTagSorter.isGluonFusion = cms.bool(bool(customize.datasetName().count("GluGlu")))
+process.flashggTagSorter.applyNNLOPSweight = cms.bool(customize.applyNNLOPSweight) #Needs to be set before cloning tag sequence
 cloneTagSequenceForEachSystematic(
     process, systlabels, phosystlabels, metsystlabels, jetsystlabels, jetSystematicsInputTags)
-
 # MUST be after tag sequence cloning
 process.flashggTagSorter.CreateNoTag = False
-process.flashggTagSorter.isGluonFusion = cms.bool(bool(customize.datasetName().count("GluGlu")))
-process.flashggTagSorter.applyNNLOPSweight = cms.bool(customize.applyNNLOPSweight)
 
 from FWCore.ParameterSet.VarParsing import VarParsing
 from flashgg.MetaData.samples_utils import SamplesManager
