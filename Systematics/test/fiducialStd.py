@@ -171,7 +171,6 @@ from flashgg.Systematics.SystematicsCustomize import *
 process.flashggTagSequence = fc.setupTagSequenceForFiducial(process, customize)
 jetSystematicsInputTags = createStandardSystematicsProducers(
     process, customize)
-modifyTagSequenceForSystematics(process, jetSystematicsInputTags)
 
 print "Printing options"
 print 'doFiducial '+str(customize.doFiducial)
@@ -238,6 +237,9 @@ signal_processes = ["ggh_", "vbf_", "wzh_", "wh_", "zh_", "bbh_", "thq_", "thw_"
 is_signal = reduce(lambda y, z: y or z, map(
     lambda x: customize.processId.count(x), signal_processes))
 
+if bool(customize.metaConditions["L1Prefiring"]["isRelevant"]):
+    customize.metaConditions["L1Prefiring"]["applyToCentral"] = "true"
+
 applyL1Prefiring = customizeForL1Prefiring(process, customize.metaConditions, customize.processId)
 
 if is_signal:
@@ -256,6 +258,10 @@ if is_signal:
     variablesToUse.append("vtxprob := diPhotonMVA().vtxprob")
     variablesToUse.append("CosPhi := diPhotonMVA().CosPhi")
     variablesToUse.append("NNLOPSweight[1,-999999.,999999.] := getTheoryWeight(\"NNLOPS\")")
+    variablesToUse.append("JetBTagCutWeightCentral[1,-999999.,999999.] := ? hasWeight( 'JetBTagCutWeightCentral' ) ? getObjectWeight( 'JetBTagCutWeightCentral' ) : -999")
+    variablesToUse.append("ElectronIDWeight[1,-999999.,999999.] := ? hasWeight( 'ElectronIDWeight' ) ? weight( 'ElectronIDWeight' ) : -999")
+    variablesToUse.append("ElectronRecoWeight[1,-999999.,999999.] := ? hasWeight( 'ElectronRecoWeight' ) ? weight(\"ElectronRecoWeight\") : -999")
+    variablesToUse.append("MuonIsoWeight[1,-999999.,999999.] := ? hasWeight( 'Muon%sISOWeight' ) ? weight(\"Muon%sISOWeight\") : -999" %(str(customize.metaConditions['MUON_ISO']), str(customize.metaConditions['MUON_ISO'])))
 #        variablesToUse.append("subleadmva := diPhotonMVA().subleadmva")
 
     if customize.doSystematics:
@@ -301,12 +307,12 @@ if is_signal:
             variablesToUse.append("TriggerWeight%s01sigma[1,-999999.,999999.] := weight(\"TriggerWeight%s01sigma\")" % (direction,direction))
             variablesToUse.append("FracRVWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVWeight%s01sigma\")" % (direction,direction))
             #variablesToUse.append("FracRVNvtxWeight%s01sigma[1,-999999.,999999.] := weight(\"FracRVNvtxWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("MuonIDWeight%s01sigma[1,-999999.,999999.] := weight(\"Muon%sIDWeight%s01sigma\")" % (direction,str(customize.metaConditions["MUON_ID"]),direction))
-            variablesToUse.append("ElectronIDWeight%s01sigma[1,-999999.,999999.] := weight(\"ElectronIDWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("ElectronRecoWeight%s01sigma[1,-999999.,999999.] := weight(\"ElectronRecoWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("MuonIsoWeight%s01sigma[1,-999999.,999999.] := weight(\"Muon%sISOWeight%s01sigma\")" % (direction,str(customize.metaConditions['MUON_ISO']),direction))
-            variablesToUse.append("JetBTagCutWeight%s01sigma[1,-999999.,999999.] := weight(\"JetBTagCutWeight%s01sigma\")" % (direction,direction))
-            variablesToUse.append("JetBTagReshapeWeight%s01sigma[1,-999999.,999999.] := weight(\"JetBTagReshapeWeight%s01sigma\")" % (direction,direction))
+            variablesToUse.append("MuonIDWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"Muon%sIDWeight%s01sigma\")" % (direction,str(customize.metaConditions["MUON_ID"]),direction))
+            variablesToUse.append("ElectronIDWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"ElectronIDWeight%s01sigma\")" % (direction,direction))
+            variablesToUse.append("ElectronRecoWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"ElectronRecoWeight%s01sigma\")" % (direction,direction))
+            variablesToUse.append("MuonIsoWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"Muon%sISOWeight%s01sigma\")" % (direction,str(customize.metaConditions['MUON_ISO']),direction))
+            variablesToUse.append("JetBTagCutWeight%s01sigma[1,-999999.,999999.] := ? hasWeight( 'JetBTagCutWeight%s01sigma' ) ? getObjectWeight(\"JetBTagCutWeight%s01sigma\") : -999" % (direction,direction,direction))
+            variablesToUse.append("JetBTagReshapeWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"JetBTagReshapeWeight%s01sigma\")" % (direction,direction))
             if applyL1Prefiring:
                 variablesToUse.append("prefireProbability%s01sigma[1,-999999.,999999.] := weight(\"prefireProbability%s01sigma\")" % (direction,direction))
             variablesToUse.append("THU_ggH_Mu%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mu%s01sigma\")" % (direction,direction))
@@ -392,7 +398,7 @@ tagList = [["SigmaMpTTag", 1]]
 
 fc.bookCompositeObjects(process, customize, customize.processId,
                         process.flashggTagSequence)
-
+modifyTagSequenceForSystematics(process, jetSystematicsInputTags)
 
 process.flashggTagSorter.isGluonFusion = cms.bool(bool(customize.datasetName().count("GluGlu")))
 process.flashggTagSorter.applyNNLOPSweight = cms.bool(customize.applyNNLOPSweight) #Needs to be set before cloning tag sequence

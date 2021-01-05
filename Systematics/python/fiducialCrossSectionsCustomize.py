@@ -514,6 +514,17 @@ def addJetGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
         if post == "BflavorTight2p5":
             variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
             variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))
+            variables.append("JetBTagCutWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'JetBTagCutWeightCentral' ) : -999".format(getter))
+            variables.append("hasJetBTagCutWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'JetBTagCutWeightCentral' ) : -999".format(getter))
+            variables.append("hasJetBTagReshapeWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'JetBTagReshapeWeightCentral' ) :-999".format(getter))
+            variables.append("JetBTagReshapeWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'JetBTagReshapeWeightCentral' ) : -999".format(getter))
+        # if post == "BflavorTight2p5":
+        #     variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
+        #     variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))
+        #     variables.append("JetBTagCutWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'JetBTagCutWeightCentral' ) : -999".format(getter))
+        #     variables.append("hasJetBTagCutWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'JetBTagCutWeightCentral' ) : -999".format(getter))
+        #     variables.append("hasJetBTagReshapeWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'JetBTagReshapeWeight' ) :-999".format(getter))
+        #     variables.append("JetBTagReshapeWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'JetBTagReshapeWeight' ) : -999".format(getter))
 #        print  ("%sJet%sBdiscriminant0 := ? %snumberOfDaughters > 0 ? %sdaughter(0).bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -999" % (pre,  post,  getter,  getter))
 #        variables+=[("%sJet%sBdiscriminant0 := ? %snumberOfDaughters > 0 ? %sdaughter(0).bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') : -999" % (pre,  post,  getter,  getter))]
     else:
@@ -655,6 +666,11 @@ def addElectronGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""
 
     if getter != "": getter += "."
     variables  = [ "%(pre)sNelectrons%(post)s[-1,(-0.5:0.5:1.5:2.5:3.5:100)]:= %(getter)snumberOfDaughters" % locals() ]
+    # variables.append("ElectronIDWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'ElectronIDWeight' ) : -999".format(getter))
+    # variables.append("hasElectronIDWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'ElectronIDWeight' ) : -999".format(getter))
+    # variables.append("ElectronRecoWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'ElectronRecoWeight' ) : -999".format(getter))
+    # variables.append("hasElectronRecoWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'ElectronRecoWeight' ) : -999".format(getter))
+    
     variables += getObjKinVariables(pre,post,"Electron",["pt","eta","rapidity","phi","px","py","pz", "energy" ],4, getter)
 
 ##    variables += [ "%(pre)sElectronPt%(post)s0 := ? %(getter)snumberOfDaughters > 0 ? %(getter)sdaughter(0).pt : -999" % locals() ]
