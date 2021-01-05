@@ -26,6 +26,7 @@
 #include "DataFormats/Candidate/interface/CompositeCandidate.h"
 
 #include "flashgg/DataFormats/interface/DiPhotonCandidate.h"
+#include "flashgg/DataFormats/interface/WeightedObject.h"
 
 namespace flashgg { 
 	template<class T> struct TrivialVetex { size_t operator()(const T& obj) { return 0; } };
@@ -45,6 +46,7 @@ namespace flashgg {
         bool veto_;
         double vetocone_;
         edm::EDGetTokenT<T> vetoToken_;
+        std::vector<edm::InputTag> srcTags;
     };
     
     template <class T, class V>
@@ -57,13 +59,12 @@ namespace flashgg {
             max_ = iConfig.getParameter<int>("maxCand");
         }
 
-        std::vector<edm::InputTag> srcTags;
         if( iConfig.existsAs<edm::InputTag>("src") ) { 
             srcTags.push_back(iConfig.getParameter<edm::InputTag> ( "src" ) ); 
         } else { 
             srcTags = iConfig.getParameter<std::vector<edm::InputTag> > ( "src" ); 
         }
-        for( auto & tag : srcTags ) { srcTokens_.push_back( consumes<edm::View<reco::Candidate> >( tag ) ); }
+        for( auto & tag : srcTags ) { srcTokens_.push_back( consumes<edm::View<reco::Candidate> >( tag ) );}
 
         if( veto_ ) { vetoToken_ = consumes<T>( iConfig.getParameter<edm::InputTag> ( "veto" ) ); }
         if( iConfig.exists("vetocone") ) { vetocone_ = iConfig.getParameter<double>("vetocone"); }
@@ -98,12 +99,37 @@ namespace flashgg {
             auto & collection = *src;
             
             int count = ( max_ > 0 ? max_ : collection.size() );
+            bool isReco = false;
+            std::cout << "-------------------InputTags-----------------" << std::endl;
+            for ( auto &tag : srcTags) {
+                if (tag.label().find("reco") != std::string::npos || tag.label().find("Reco") != std::string::npos){
+                    isReco = true;
+                }
+                std::cout << "Source Tag: "<< tag << "isReco: " << isReco <<std::endl;
+            }
+            std::cout << "-------------------InputTags-----------------" << std::endl;
             for( size_t iob = 0; iob<collection.size() && count > 0; ++iob ) {
                 auto & cand = collection.at(iob);
                 bool add = true;
                 if( ( veto_ && veto->size() > 0 ) &&
                     ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),cand) < vetocone_ ) ) { add=false; }
-                if( add ) { out.addDaughter(cand); --count; }
+                if( add ) {
+                    out.addDaughter(cand);
+                    const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
+                    if ( isReco ){
+                        if (wObj->hasWeight("JetBTagCutWeight")){
+                            std::cout << "JetBTagCutWeight HadronicActivityProducer: " << wObj->weight("JetBTagCutWeight") << std::endl;
+                        } else {
+                            std::cout << "JetBTagCutWeight HadronicActivityProducer not found!" << std::endl;
+                        }
+                        if (wObj->hasWeight("JetBTagCutWeightCentral")){
+                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer: " << wObj->weight("JetBTagCutWeightCentral") << std::endl;
+                        } else {
+                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer not found!" << std::endl;
+                        }
+                    }
+                    --count;
+                }
             }
             
             AddFourMomenta addP4;
