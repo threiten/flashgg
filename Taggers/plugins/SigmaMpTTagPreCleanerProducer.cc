@@ -11,6 +11,8 @@
 #include "flashgg/DataFormats/interface/DiPhotonMVAResult.h"
 #include "flashgg/DataFormats/interface/SigmaMpTTag.h"
 #include "flashgg/DataFormats/interface/TagTruthBase.h"
+#include "flashgg/DataFormats/interface/WeightedObject.h"
+#include "flashgg/DataFormats/interface/Jet.h"
 #include "DataFormats/Common/interface/RefToPtr.h"
 
 
@@ -152,6 +154,18 @@ namespace flashgg {
             for (size_t itok=0; itok<compositeCandidatesTokens_.size(); itok++){
                 edm::Ptr<reco::CompositeCandidate> compcand = compositeCandidateHandles[itok]->ptrAt(candIndex);
                 compObjMap.insert(std::pair<std::string, edm::Ptr<reco::CompositeCandidate> >(compCandNames_[itok], compcand) );
+                // if (compCandNames_[itok] == "jetsBflavorTight2p5"){
+                //     std::string varName = "JetBTagCutWeight";
+                //     const flashgg::Jet *bjet = dynamic_cast<const flashgg::Jet *>(compcand->daughter(0));
+                //     if (bjet->hasWeight("JetBTagCutWeightCentral")){
+                //         std::cout << compCandNames_[itok] + varName << ": " << bjet->weight("JetBTagCutWeightCentral") << std::endl;
+                //         // dipho->addUserFloat(compCandNames_[itok] + varName, bjet->weight("JetBTagCutWeightCentral"));
+                //     }
+                //     if (bjet->hasWeight("JetBTagCutWeight")){
+                //         std::cout << compCandNames_[itok] + varName << ": " << bjet->weight("JetBTagCutWeight") << std::endl;
+                //         // dipho->addUserFloat(compCandNames_[itok] + varName, bjet->weight("JetBTagCutWeight"));
+                //     }
+                // }
             }
             
 
