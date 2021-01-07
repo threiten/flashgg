@@ -32,7 +32,7 @@
 namespace flashgg { 
 	template<class T> struct TrivialVetex { size_t operator()(const T& obj) { return 0; } };
 	
-    template <class T, class V=TrivialVetex<typename T::value_type> >
+    template <class T, class D, class V=TrivialVetex<typename T::value_type>>
     class HadronicActivityProducer : public edm::global::EDProducer<> {
         
     public:
@@ -42,7 +42,7 @@ namespace flashgg {
         virtual void produce(edm::StreamID, edm::Event&, const edm::EventSetup&) const;
         
     private:
-        std::vector<edm::EDGetTokenT<edm::View<flashgg::WeightedObject> > > srcTokens_;
+        std::vector<edm::EDGetTokenT<edm::View<D> > > srcTokens_;
         int max_;
         bool veto_;
         double vetocone_;
@@ -50,8 +50,8 @@ namespace flashgg {
         std::vector<edm::InputTag> srcTags;
     };
     
-    template <class T, class V>
-    HadronicActivityProducer<T,V>::HadronicActivityProducer(const edm::ParameterSet& iConfig) : 
+    template <class T, class D, class V>
+    HadronicActivityProducer<T,D,V>::HadronicActivityProducer(const edm::ParameterSet& iConfig) : 
         max_(-1),
         veto_( iConfig.exists("veto") ),
         vetocone_( 0.4 )
@@ -65,21 +65,23 @@ namespace flashgg {
         } else { 
             srcTags = iConfig.getParameter<std::vector<edm::InputTag> > ( "src" ); 
         }
-        for( auto & tag : srcTags ) { srcTokens_.push_back( consumes<edm::View<flashgg::WeightedObject> >( tag ) );}
+        for( auto & tag : srcTags ) {
+            srcTokens_.push_back( consumes<edm::View<D> >( tag ) );
+        }
 
         if( veto_ ) { vetoToken_ = consumes<T>( iConfig.getParameter<edm::InputTag> ( "veto" ) ); }
         if( iConfig.exists("vetocone") ) { vetocone_ = iConfig.getParameter<double>("vetocone"); }
 
-        produces<std::vector<reco::CompositeCandidate> >();	
+        produces<std::vector<flashgg::WeightedCompositeCandidate> >();	
     }
     
-    template <class T, class V>
-    HadronicActivityProducer<T,V>::~HadronicActivityProducer() {}
+    template <class T, class D, class V>
+    HadronicActivityProducer<T,D,V>::~HadronicActivityProducer() {}
     
-    template <class T, class V>
-    void HadronicActivityProducer<T,V>::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSetup& iSetup) const {
+    template <class T, class D, class V>
+    void HadronicActivityProducer<T,D,V>::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSetup& iSetup) const {
         
-        std::unique_ptr<std::vector<reco::CompositeCandidate> > outPtr(new std::vector<reco::CompositeCandidate>);
+        std::unique_ptr<std::vector<flashgg::WeightedCompositeCandidate> > outPtr(new std::vector<flashgg::WeightedCompositeCandidate>);
        
         edm::Handle<T> veto;
         if( veto_ )  {
@@ -95,40 +97,25 @@ namespace flashgg {
             }
             if( index > srcTokens_.size()-1 ) { index = 0; }
             
-            edm::Handle<edm::View<flashgg::WeightedObject> > src;
+            edm::Handle<edm::View<D> > src;
             iEvent.getByToken( srcTokens_[index],  src);
             auto & collection = *src;
             
             int count = ( max_ > 0 ? max_ : collection.size() );
-            bool isReco = false;
-            std::cout << "-------------------InputTags-----------------" << std::endl;
-            for ( auto &tag : srcTags) {
-                if (tag.label().find("reco") != std::string::npos || tag.label().find("Reco") != std::string::npos){
-                    isReco = true;
-                }
-                std::cout << "Source Tag: "<< tag << "isReco: " << isReco <<std::endl;
-            }
-            std::cout << "-------------------InputTags-----------------" << std::endl;
+            // bool isReco = false;
+            // for ( auto &tag : srcTags) {
+            //     if (tag.label().find("reco") != std::string::npos || tag.label().find("Reco") != std::string::npos){
+            //         isReco = true;
+            //     }
+            // }
             for( size_t iob = 0; iob<collection.size() && count > 0; ++iob ) {
-                auto & cand = collection.at(iob);
+                edm::Ptr<D> cand = collection.ptrAt(iob);       
                 bool add = true;
-                // if( ( veto_ && veto->size() > 0 ) &&
-                //     ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),cand) < vetocone_ ) ) { add=false; }
+                if( ( veto_ && veto->size() > 0 ) &&
+                    ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),*cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),*cand) < vetocone_ ) ) { add=false; }
                 if( add ) {
                     // const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
-                    out.addDaughter(cand);
-                    if ( isReco ){
-                        if (out.hasWeight("JetBTagCutWeight")){
-                            std::cout << "JetBTagCutWeight HadronicActivityProducer: " << out.weight("JetBTagCutWeight") << std::endl;
-                        } else {
-                            std::cout << "JetBTagCutWeight HadronicActivityProducer not found!" << std::endl;
-                        }
-                        if (out.hasWeight("JetBTagCutWeightCentral")){
-                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer: " << out.weight("JetBTagCutWeightCentral") << std::endl;
-                        } else {
-                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer not found!" << std::endl;
-                        }
-                    }
+                    out.addDaughter<D>(cand);
                     --count;
                 }
             }

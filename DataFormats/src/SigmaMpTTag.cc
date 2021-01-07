@@ -11,17 +11,17 @@ SigmaMpTTag::SigmaMpTTag( edm::Ptr<flashgg::DiPhotonCandidate> diPho, edm::Ptr<D
 
 SigmaMpTTag::SigmaMpTTag( edm::Ptr<DiPhotonCandidate> dipho, DiPhotonMVAResult mvares ) :  DiPhotonTagBase::DiPhotonTagBase( dipho, mvares ) {}
 
-SigmaMpTTag::SigmaMpTTag( edm::Ptr<flashgg::DiPhotonCandidate> diPho, edm::Ptr<DiPhotonMVAResult> mvaRes, std::map<std::string, edm::Ptr<reco::CompositeCandidate> > compObjMap )
+SigmaMpTTag::SigmaMpTTag( edm::Ptr<flashgg::DiPhotonCandidate> diPho, edm::Ptr<DiPhotonMVAResult> mvaRes, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > compObjMap )
     : SigmaMpTTag::SigmaMpTTag( diPho, *mvaRes, compObjMap ) {}
 
-SigmaMpTTag::SigmaMpTTag( edm::Ptr<DiPhotonCandidate> dipho, DiPhotonMVAResult mvares, std::map<std::string, edm::Ptr<reco::CompositeCandidate> > compObjMap ) :  DiPhotonTagBase::DiPhotonTagBase( dipho,
+SigmaMpTTag::SigmaMpTTag( edm::Ptr<DiPhotonCandidate> dipho, DiPhotonMVAResult mvares, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > compObjMap ) :  DiPhotonTagBase::DiPhotonTagBase( dipho,
             mvares ) {
     
     compObjMap_ = compObjMap;
 
 }
 
-const edm::Ptr<reco::CompositeCandidate > SigmaMpTTag::getCompCand(const std::string &name) const
+const edm::Ptr<flashgg::WeightedCompositeCandidate > SigmaMpTTag::getCompCand(const std::string &name) const
 {
     auto itr = compObjMap_.find(name);
     if(itr==compObjMap_.end()){
