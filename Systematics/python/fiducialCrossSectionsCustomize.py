@@ -284,14 +284,14 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
 ##standard jets
     if doJets:
 	    if( not hasattr(process,"flashggRecoHadronicActivity2p5") ): 
-	        process.flashggRecoHadronicActivity2p5 = cms.EDProducer("FlashggDiPhotonJetHadronicActivityProducer",
+	        process.flashggRecoHadronicActivity2p5 = cms.EDProducer("FlashggDiPhotonHadronicActivityProducer",
 	                                                                src=recoJets2p5,
 	                                                                veto=cms.InputTag(recoDiphotons)
 	                                                                )
 	        tagSequence.insert(recoPos, getattr(process,"flashggRecoHadronicActivity2p5"))
 	        recoPos += 1
 	    if( not hasattr(process,"flashggRecoHadronicActivity4p7") ): 
-	        process.flashggRecoHadronicActivity4p7 = cms.EDProducer("FlashggDiPhotonJetHadronicActivityProducer",
+	        process.flashggRecoHadronicActivity4p7 = cms.EDProducer("FlashggDiPhotonHadronicActivityProducer",
 	                                                                src=recoJets4p7,
 	                                                                veto=cms.InputTag(recoDiphotons)
 	                                                                )
@@ -310,7 +310,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
 	
 	
 	    if( not hasattr(process,"flashggRecoHadronicActivityBflavorTight2p5") ): 
-	        process.flashggRecoHadronicActivityBflavorTight2p5 = cms.EDProducer("FlashggDiPhotonJetHadronicActivityProducer",
+	        process.flashggRecoHadronicActivityBflavorTight2p5 = cms.EDProducer("FlashggDiPhotonHadronicActivityProducer",
 	                                                                src=recoJetsBflavorTight2p5,
 	                                                                veto=cms.InputTag(recoDiphotons) ##veto also muons!
 	                                                                )
@@ -320,7 +320,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
 
     if doBJetsAndMET:
         if( not hasattr(process,"flashggRecoHadronicActivityMET") ): 
-            process.flashggRecoHadronicActivityMET = cms.EDProducer("FlashggDiPhotonMetHadronicActivityProducer",
+            process.flashggRecoHadronicActivityMET = cms.EDProducer("FlashggDiPhotonHadronicActivityProducer",
                                                                     src=recoMet,
                                                                     veto=cms.InputTag(recoDiphotons)
                                                                     )
@@ -328,7 +328,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
             recoPos += 1
     if doBJetsAndMET:
         if( not hasattr(process,"flashggRecoHadronicActivityMuons") ): 
-            process.flashggRecoHadronicActivityMuons = cms.EDProducer("FlashggDiPhotonMuonHadronicActivityProducer",
+            process.flashggRecoHadronicActivityMuons = cms.EDProducer("FlashggDiPhotonHadronicActivityProducer",
                                                                     src=recoMuons,
                                                                     veto=cms.InputTag(recoDiphotons) 
                                                                     )
@@ -336,7 +336,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
             recoPos += 1
     
         if( not hasattr(process,"flashggRecoHadronicActivityElectrons") ): 
-            process.flashggRecoHadronicActivityElectrons = cms.EDProducer("FlashggDiPhotonElectronHadronicActivityProducer",
+            process.flashggRecoHadronicActivityElectrons = cms.EDProducer("FlashggDiPhotonHadronicActivityProducer",
                                                                     src=recoElectrons,
                                                                     veto=cms.InputTag(recoDiphotons) 
                                                                     )
@@ -374,7 +374,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
 	        )
                 process.genSequence.insert(genPos, getattr(process,"filteredGenJetsEta2p5"))
                 genPos += 1
-	        process.flashggGenHadronicActivity2p5 = cms.EDProducer("FlashggGenJetHadronicActivityProducer",
+	        process.flashggGenHadronicActivity2p5 = cms.EDProducer("FlashggGenHadronicActivityProducer",
 	                                                               src=cms.InputTag("filteredGenJetsEta2p5"),
 	                                                               veto=cms.InputTag(genDiphotons)
 	        )
@@ -387,7 +387,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
 	        )
 	        process.genSequence.insert(genPos, getattr(process,"filteredGenJetsEta4p7"))
                 genPos += 1
-	        process.flashggGenHadronicActivity4p7 = cms.EDProducer("FlashggGenJetHadronicActivityProducer",
+	        process.flashggGenHadronicActivity4p7 = cms.EDProducer("FlashggGenHadronicActivityProducer",
 	                                                                   src=cms.InputTag("filteredGenJetsEta4p7"),
 	                                                                   veto=cms.InputTag(genDiphotons)
 	                                                                   )
@@ -410,7 +410,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
         	                                            )
         	process.genSequence.insert(genPos, getattr(process,"filteredGenJetsBflavorEta2p5"))
                 genPos += 1
-        	process.flashggGenHadronicActivityBflavor2p5 = cms.EDProducer("FlashggGenJetHadronicActivityProducer",
+        	process.flashggGenHadronicActivityBflavor2p5 = cms.EDProducer("FlashggGenHadronicActivityProducer",
         	                                                              src=cms.InputTag("filteredGenJetsBflavorEta2p5"),
         	                                                              veto=cms.InputTag(genDiphotons)
         	)
@@ -419,7 +419,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
                 
         if doBJetsAndMET:
             if( not hasattr(process,"flashggGenHadronicActivityMET") ): 
-                process.flashggGenHadronicActivityMET = cms.EDProducer("FlashggGenMetHadronicActivityProducer",
+                process.flashggGenHadronicActivityMET = cms.EDProducer("FlashggGenHadronicActivityProducer",
                                                                        src=cms.InputTag("flashggMets"),
                                                                        veto=cms.InputTag(genDiphotons)
                                                                        )
@@ -435,7 +435,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
                                                          )
             process.genSequence.insert(genPos, getattr(process, "filteredGenJetsEtaInclusive"))
             genPos += 1
-            process.flashggGenHadronicActivityInclusive = cms.EDProducer("FlashggGenJetHadronicActivityProducer",
+            process.flashggGenHadronicActivityInclusive = cms.EDProducer("FlashggGenHadronicActivityProducer",
                                                                    src=cms.InputTag("filteredGenJetsEtaInclusive"),
                                                                    veto=cms.InputTag(genDiphotons)
                                                                    )
@@ -460,7 +460,7 @@ def bookHadronicActivityProducers(process,options,processId,tagSequence,recoDiph
                                                          )
                 process.genSequence.insert(genPos, getattr(process,"filteredGenLeptonsEta2p4"))
                 genPos += 1            
-                process.flashggGenHadronicActivityLeptons2p4 = cms.EDProducer("FlashggGenLeptonHadronicActivityProducer",
+                process.flashggGenHadronicActivityLeptons2p4 = cms.EDProducer("FlashggGenHadronicActivityProducer",
                                                                        src=cms.InputTag("filteredGenLeptonsEta2p4"),
                                                                        veto=cms.InputTag(genDiphotons)
                                                                        )
@@ -511,11 +511,13 @@ def addJetGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
 #    variables += getJetKinVariables(pre,post,["pt[667,0.0,10005.0]","eta[50,-5.0,5.0]","rapidity[50,0.0,10.0]"],5)
     if pre =="reco":
         variables += getJetKinVariables(pre,post,["pt","eta","rapidity","phi","px","py","pz", "energy", "numberOfDaughters[200,-0.5,199.5]", "puJetIdMVA", ],6, getter)
-        if post == "2p5":
+        if post == "BflavorTight2p5":
             variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
             variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))
-            variables.append("JetBTagCutWeightCompObj := ? {0}hasWeight( 'JetBTagCutWeightCentral' ) ? {0}weight( 'JetBTagCutWeightCentral' ) :-999".format(getter))
-            variables.append("JetBTagReshapeWeightCompObj := ? {0}hasWeight( 'JetBTagReshapeWeightCentral' ) ? {0}weight( 'JetBTagReshapeWeightCentral' ) :-999".format(getter))
+            variables.append("JetBTagCutWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'JetBTagCutWeightCentral' ) : -999".format(getter))
+            variables.append("hasJetBTagCutWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'JetBTagCutWeightCentral' ) : -999".format(getter))
+            variables.append("hasJetBTagReshapeWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'JetBTagReshapeWeightCentral' ) :-999".format(getter))
+            variables.append("JetBTagReshapeWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'JetBTagReshapeWeightCentral' ) : -999".format(getter))
         # if post == "BflavorTight2p5":
         #     variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
         #     variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))

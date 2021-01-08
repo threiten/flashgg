@@ -54,9 +54,8 @@
 <class name="flashgg::NoTag"/>
 <class name="std::vector<flashgg::NoTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::NoTag> >"/>
-<class name="flashgg::SigmaMpTTag" ClassVersion="10">
- <!-- <version ClassVersion="11" checksum="3801852758"/> -->
-  <version ClassVersion="10" checksum="3801852758"/>
+<class name="flashgg::SigmaMpTTag" ClassVersion="0">
+  <version ClassVersion="0" checksum="2104351160"/>
 </class>
 <class name="std::vector<flashgg::SigmaMpTTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::SigmaMpTTag> >"/>
@@ -451,7 +450,6 @@
   <version ClassVersion="10" checksum="2099650607"/>
   <version ClassVersion="11" checksum="2809364010"/>
 </class>
-
 <class name="std::vector<flashgg::DoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::DoubleHTag> >"/>
 
@@ -462,12 +460,6 @@
  <version ClassVersion="12" checksum="2509632910"/>
  <version ClassVersion="5" checksum="3026455436"/>
 </class>
-
-<class name="flashgg::WeightedCompositeCandidate" ClassVersion="0">
-</class>
-<class name="std::vector<flashgg::WeightedCompositeCandidate>"/>
-<class name="edm::Wrapper<std::vector<flashgg::WeightedCompositeCandidate> >"/>
-
 <class name="std::vector<flashgg::VBFDoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::VBFDoubleHTag> >"/>
 
