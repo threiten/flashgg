@@ -9,12 +9,12 @@
 
 //For medium working point
 
-BTagCalibrationReader readerMedB(BTagEntry::OP_TIGHT, "central", {"up", "down"}); //readerMedB.load(calib, BTagEntry::FLAV_B, "comb"); 
+BTagCalibrationReader readerMedB(BTagEntry::OP_MEDIUM, "central", {"up", "down"}); //readerMedB.load(calib, BTagEntry::FLAV_B, "comb"); 
 
-BTagCalibrationReader readerMedC(BTagEntry::OP_TIGHT, "central", {"up", "down"}); //readerMedC.load(calib, BTagEntry::FLAV_C, "comb");   // operating point
+BTagCalibrationReader readerMedC(BTagEntry::OP_MEDIUM, "central", {"up", "down"}); //readerMedC.load(calib, BTagEntry::FLAV_C, "comb");   // operating point
                                // "central",               // central sys type
                                // {"up", "down"});        // other systematics type
-BTagCalibrationReader readerMedUDSG(BTagEntry::OP_TIGHT,  "central", {"up", "down"}); //readerMedUDSG.load(calib, BTagEntry::FLAV_UDSG, "comb");  // operating point
+BTagCalibrationReader readerMedUDSG(BTagEntry::OP_MEDIUM,  "central", {"up", "down"}); //readerMedUDSG.load(calib, BTagEntry::FLAV_UDSG, "comb");  // operating point
                                // "central",               // central sys type
                                // {"up", "down"});        // other systematics type
 

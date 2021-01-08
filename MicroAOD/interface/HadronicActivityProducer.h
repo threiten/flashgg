@@ -27,7 +27,6 @@
 
 #include "flashgg/DataFormats/interface/DiPhotonCandidate.h"
 #include "flashgg/DataFormats/interface/WeightedObject.h"
-#include "flashgg/DataFormats/interface/WeightedCompositeCandidate.h"
 
 namespace flashgg { 
 	template<class T> struct TrivialVetex { size_t operator()(const T& obj) { return 0; } };
@@ -42,7 +41,7 @@ namespace flashgg {
         virtual void produce(edm::StreamID, edm::Event&, const edm::EventSetup&) const;
         
     private:
-        std::vector<edm::EDGetTokenT<edm::View<flashgg::WeightedObject> > > srcTokens_;
+        std::vector<edm::EDGetTokenT<edm::View<reco::Candidate> > > srcTokens_;
         int max_;
         bool veto_;
         double vetocone_;
@@ -65,7 +64,7 @@ namespace flashgg {
         } else { 
             srcTags = iConfig.getParameter<std::vector<edm::InputTag> > ( "src" ); 
         }
-        for( auto & tag : srcTags ) { srcTokens_.push_back( consumes<edm::View<flashgg::WeightedObject> >( tag ) );}
+        for( auto & tag : srcTags ) { srcTokens_.push_back( consumes<edm::View<reco::Candidate> >( tag ) );}
 
         if( veto_ ) { vetoToken_ = consumes<T>( iConfig.getParameter<edm::InputTag> ( "veto" ) ); }
         if( iConfig.exists("vetocone") ) { vetocone_ = iConfig.getParameter<double>("vetocone"); }
@@ -87,7 +86,7 @@ namespace flashgg {
         }
         size_t N_dipho = veto_ ? veto->size() : 1;
         for(size_t idipho=0;  idipho< N_dipho; idipho++){
-            flashgg::WeightedCompositeCandidate out; 
+            reco::CompositeCandidate out; 
             size_t index = 0;
             if( veto_ )  {
                 //    iEvent.getByToken( vetoToken_,  veto);
@@ -95,7 +94,7 @@ namespace flashgg {
             }
             if( index > srcTokens_.size()-1 ) { index = 0; }
             
-            edm::Handle<edm::View<flashgg::WeightedObject> > src;
+            edm::Handle<edm::View<reco::Candidate> > src;
             iEvent.getByToken( srcTokens_[index],  src);
             auto & collection = *src;
             
@@ -112,19 +111,19 @@ namespace flashgg {
             for( size_t iob = 0; iob<collection.size() && count > 0; ++iob ) {
                 auto & cand = collection.at(iob);
                 bool add = true;
-                // if( ( veto_ && veto->size() > 0 ) &&
-                //     ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),cand) < vetocone_ ) ) { add=false; }
+                if( ( veto_ && veto->size() > 0 ) &&
+                    ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),cand) < vetocone_ ) ) { add=false; }
                 if( add ) {
-                    // const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
                     out.addDaughter(cand);
+                    const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
                     if ( isReco ){
-                        if (out.hasWeight("JetBTagCutWeight")){
-                            std::cout << "JetBTagCutWeight HadronicActivityProducer: " << out.weight("JetBTagCutWeight") << std::endl;
+                        if (wObj->hasWeight("JetBTagCutWeight")){
+                            std::cout << "JetBTagCutWeight HadronicActivityProducer: " << wObj->weight("JetBTagCutWeight") << std::endl;
                         } else {
                             std::cout << "JetBTagCutWeight HadronicActivityProducer not found!" << std::endl;
                         }
-                        if (out.hasWeight("JetBTagCutWeightCentral")){
-                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer: " << out.weight("JetBTagCutWeightCentral") << std::endl;
+                        if (wObj->hasWeight("JetBTagCutWeightCentral")){
+                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer: " << wObj->weight("JetBTagCutWeightCentral") << std::endl;
                         } else {
                             std::cout << "JetBTagCutWeightCentral HadronicActivityProducer not found!" << std::endl;
                         }
