@@ -467,7 +467,6 @@
 </class>
 <class name="std::vector<flashgg::WeightedCompositeCandidate>"/>
 <class name="edm::Wrapper<std::vector<flashgg::WeightedCompositeCandidate> >"/>
-<class name="edm::Ptr<flashgg::WeightedCompositeCandidate>"/>
 
 <class name="std::vector<flashgg::VBFDoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::VBFDoubleHTag> >"/>

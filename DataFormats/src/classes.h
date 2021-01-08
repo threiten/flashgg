@@ -341,7 +341,6 @@ namespace  {
         flashgg::WeightedCompositeCandidate                                       fgg_wcc;
         std::vector<flashgg::WeightedCompositeCandidate>                      vec_fgg_wcc;
         edm::Wrapper<std::vector<flashgg::WeightedCompositeCandidate> >   wrp_vec_fgg_wcc;
-        edm::Ptr<flashgg::WeightedCompositeCandidate>                         ptr_fgg_wcc;
         
         flashgg::TagCandidate                                        tags;
         edm::Wrapper<flashgg::TagCandidate>                      wrp_tags;
