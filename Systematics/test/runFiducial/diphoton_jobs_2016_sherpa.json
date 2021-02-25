@@ -1,0 +1,8 @@
+{
+    "processes" : {
+    	"DiPhotonJets_80_Inf_Sherpa"  :[
+	    "/DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa/spigazzi-Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2-735d6f5d6752834cf1de64ba6920599a/USER"
+	]
+    },
+    "cmdLine" : "campaign=Era2016_RR-17Jul2018_v2 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json doFiducial=True acceptance=BKG" 
+}

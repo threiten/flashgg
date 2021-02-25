@@ -1,0 +1,9 @@
+{
+    "processes" : {
+    	"GJet_MGG_80_Inf":[
+	    "/GJet_Pt-20to40_DoubleEMEnriched_MGG-80toInf_TuneCP5_13TeV_Pythia8/spigazzi-Era2017_RR-31Mar2018_v2-legacyRun2FullV1-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1-4d2010f8ba2360fb4de1038d4a1ef29e/USER",
+	    "/GJet_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCP5_13TeV_Pythia8/spigazzi-Era2017_RR-31Mar2018_v2-legacyRun2FullV1-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2-4d2010f8ba2360fb4de1038d4a1ef29e/USER"
+	]
+    },
+    "cmdLine" : "campaign=Era2017_RR-31Mar2018_v2  metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2017_RR-31Mar2018_v1.json doFiducial=True acceptance=BKG"
+}

@@ -1,0 +1,9 @@
+{
+    "processes" : {
+    	"InsideAcceptance_125"  :[
+	    ["/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8/spigazzi-Era2018_RR-17Sep2018_v2-legacyRun2FullV2-v0-RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1-22826b4b3f0f74a98f5d2803cae2df21/USER",
+	     {"args" : ["acceptance=IN","outputFile=output_ttHJetToGG_M125_IA.root", "processIndex=14", "doSystematics=True"]}]
+	]
+    },
+    "cmdLine" : "campaign=Era2018_RR-17Sep2018_v2 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_RR-17Sep2018_v1.json doFiducial=True"
+}

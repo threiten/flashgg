@@ -1,0 +1,9 @@
+{
+    "processes" : {
+    	"OutsideAcceptance_125"  :[
+	    ["/VBFHToGG_M125_13TeV_amcatnlo_pythia8/spigazzi-Era2016_RR-17Jul2018_v2-legacyRun2FullV1-v0-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2-42666aea495bdc3a36d796ff9c4bc819/USER",
+	     {"args" :["acceptance=OUT","outputFile=output_VBFHToGG_M125_OA.root", "processIndex=12"]}]
+	]
+    },
+    "cmdLine" : "campaign=Era2016_RR-17Jul2018_v2 metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2016_RR-17Jul2018_v1.json doFiducial=True"
+}

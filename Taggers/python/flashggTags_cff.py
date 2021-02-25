@@ -4,7 +4,7 @@ from flashgg.MicroAOD.flashggJets_cfi import flashggBTag, flashggDeepCSV, Unpack
 bDiscriminator74X = cms.vdouble(0.605,0.890)
 bDiscriminator76X = cms.vdouble(0.460,0.800,0.935)
 bDiscriminator80XReReco = cms.vdouble(0.5426,0.8484,0.9535)
-bDiscriminator94X= cms.vdouble(0.1522,0.4941,0.8001)
+bDiscriminator94X = cms.vdouble(0.1522,0.4941,0.8001)
 
 flashggUntagged = cms.EDProducer("FlashggUntaggedTagProducer",
 #                                 DiPhotonTag=cms.InputTag('flashggDiPhotons'),

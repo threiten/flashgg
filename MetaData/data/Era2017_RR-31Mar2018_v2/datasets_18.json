@@ -6651,7 +6651,7 @@
                 "weights": 100551.90625
             }, 
             {
-                "bad": false, 
+                "bad": true, 
                 "events": 24730, 
                 "name": "/store/user/spigazzi/flashgg/Era2017_RR-31Mar2018_v2/legacyRun2FullV1/VBFHToGG_M125_13TeV_amcatnlo_pythia8/Era2017_RR-31Mar2018_v2-legacyRun2FullV1-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/190703_112047/0000/myMicroAODOutputFile_34.root", 
                 "nevents": 24730, 
@@ -6659,7 +6659,7 @@
                 "weights": 100135.21875
             }, 
             {
-                "bad": false, 
+                "bad": true, 
                 "events": 24730, 
                 "name": "/store/user/spigazzi/flashgg/Era2017_RR-31Mar2018_v2/legacyRun2FullV1/VBFHToGG_M125_13TeV_amcatnlo_pythia8/Era2017_RR-31Mar2018_v2-legacyRun2FullV1-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/190703_112047/0000/myMicroAODOutputFile_35.root", 
                 "nevents": 24730, 
@@ -6739,7 +6739,7 @@
                 "weights": 100161.28125
             }, 
             {
-                "bad": false, 
+                "bad": true, 
                 "events": 25238, 
                 "name": "/store/user/spigazzi/flashgg/Era2017_RR-31Mar2018_v2/legacyRun2FullV1/VBFHToGG_M125_13TeV_amcatnlo_pythia8/Era2017_RR-31Mar2018_v2-legacyRun2FullV1-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/190703_112047/0000/myMicroAODOutputFile_33.root", 
                 "nevents": 25238, 
@@ -6755,7 +6755,7 @@
                 "weights": 102505.1328125
             }, 
             {
-                "bad": false, 
+                "bad": true, 
                 "events": 24984, 
                 "name": "/store/user/spigazzi/flashgg/Era2017_RR-31Mar2018_v2/legacyRun2FullV1/VBFHToGG_M125_13TeV_amcatnlo_pythia8/Era2017_RR-31Mar2018_v2-legacyRun2FullV1-v0-RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/190703_112047/0000/myMicroAODOutputFile_32.root", 
                 "nevents": 24984, 

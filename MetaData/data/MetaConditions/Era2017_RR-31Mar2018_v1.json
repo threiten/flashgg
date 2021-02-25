@@ -215,10 +215,12 @@
 	"bTagger" : "pfDeepJet",
 
 	"bDiscriminatorValue_pfDeepCSV" : 0.4941,
+	"bDiscriminatorValueTight_pfDeepCSV" : 0.8001,
 	"bTagCalibrationFile_Reshape_pfDeepCSV" : "flashgg/Systematics/data/DeepCSV_94XSF_V4_B_F.csv",
 	"bTagCalibrationFile_WPCut_pfDeepCSV" : "flashgg/Systematics/data/DeepCSV_94XSF_WP_V4_B_F.csv",
 
 	"bDiscriminatorValue_pfDeepJet" : 0.3033,
+	"bDiscriminatorValueTight_pfDeepJet" : 0.7489,
 	"bTagCalibrationFile_Reshape_pfDeepJet" : "flashgg/Systematics/data/DeepFlavour_94XSF_V2_B_F.csv",
 	"bTagCalibrationFile_WPCut_pfDeepJet" : "flashgg/Systematics/data/DeepFlavour_94XSF_WP_V2_B_F.csv",
 
