@@ -289,7 +289,7 @@ looseMvaBins = cms.PSet(
 sigmaEOverEShiftBins = cms.PSet(
     variables = cms.vstring("abs(superCluster.eta)"),
     bins = cms.VPSet(
-                     cms.PSet( lowBounds = cms.vdouble(0.000), upBounds = cms.vdouble(999.), values = cms.vdouble( 0.0 ), uncertainties = cms.vdouble( 0.05 ))
+                     cms.PSet( lowBounds = cms.vdouble(0.000), upBounds = cms.vdouble(999.), values = cms.vdouble( 0.0 ), uncertainties = cms.vdouble( 0.02 ))
                      )
     )
 
