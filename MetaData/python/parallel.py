@@ -329,7 +329,8 @@ class WorkNodeJobFactory(object):
         print "\n".join(content)
         print
         stat,out =  commands.getstatusoutput("cd $CMSSW_BASE; tar %s" % " ".join(args) )
-
+        print args
+        
         if stat != 0:
             print "error (%d) creating job tarball"
             print "CMSSW_BASE: %s" % os.environ["CMSSW_BASE"]
