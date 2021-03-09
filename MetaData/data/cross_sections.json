@@ -173,6 +173,7 @@
     "ttHToGG_M125_13TeV_powheg_pythia8"                                              : { "xs" : 0.5071,   "br" : 0.00227, "kf" : 1.06, "itype":-125300 },
     "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8"                             : { "xs" : 0.5071,   "br" : 0.00227, "kf" : 1.06, "itype":-125300 },
     "ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"                             : { "xs" : 0.5071,   "br" : 0.00227, "kf" : 1.06, "itype":-125300 },
+    "ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_storeWeights"                             : { "xs" : 0.5071,   "br" : 0.00227, "kf" : 1.06, "itype":-125300 },
     "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_PSWeights"                   : { "xs" : 0.5071,   "br" : 0.00227, "kf" : 1.06, "itype":-125300 },
     "ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_v2"                          : { "xs" : 0.5071,   "br" : 0.00227, "kf" : 1.06, "itype":-125300 },
 
@@ -253,6 +254,7 @@
     "VBFHToGG_M-124_13TeV_powheg_pythia8"                          : { "xs" : 3.8120,   "br" : 0.002266, "kf" : 1.06, "itype":-124100 },
     "VBFHToGG_M125_13TeV_amcatnlo_pythia8"                          : { "xs" : 3.7820,   "br" : 0.00227, "kf" : 1.06, "itype":-125100 },
     "VBFHToGG_M125_TuneCP5_13TeV-amcatnlo-pythia8"                          : { "xs" : 3.7820,   "br" : 0.00227, "kf" : 1.06, "itype":-125100 },
+    "VBFHToGG_M125_TuneCP5_13TeV-amcatnlo-pythia8_storeWeights"                          : { "xs" : 3.7820,   "br" : 0.00227, "kf" : 1.06, "itype":-125100 },
     "VBFHToGG_M125_13TeV_amcatnlo_pythia8_v2"                          : { "xs" : 3.7820,   "br" : 0.00227, "kf" : 1.06, "itype":-125100 },
     "VBFHToGG_M-125_13TeV_powheg_pythia8"                          : { "xs" : 3.7820,   "br" : 0.00227, "kf" : 1.06, "itype":-125100 },
     "VBFHToGG_M125_13TeV_amcatnlo_pythia8_CUETP8M1Up"                          : { "xs" : 3.7820,   "br" : 0.00227, "kf" : 1.06, "itype":-125100 },
