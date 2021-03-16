@@ -152,31 +152,21 @@ namespace flashgg {
             //edm::Ptr<flashgg::WeightedCompositeCandidate> > compcands = compositeCandidates->ptrAt( candIndex );
             
             std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > compObjMap;
+            std::map<std::string, float > extraWeightsMap;
             for (size_t itok=0; itok<compositeCandidatesTokens_.size(); itok++){
                 edm::Ptr<flashgg::WeightedCompositeCandidate> compcand = compositeCandidateHandles[itok]->ptrAt(candIndex);
-                if (compcand->hasWeight("JetBTagCutWeightCentral")){
-                    std::cout << "JetBTagCutWeightCentral for type " << compCandNames_[itok] << " SigmaMpTTagPreCleanerProducer: " << compcand->weight("JetBTagCutWeightCentral") << std::endl;
-                } else {
-                    std::cout << "JetBTagCutWeightCentral for type " << compCandNames_[itok] << " not found in SigmaMpTTagPreCleanerProducer !" << std::endl; 
-                }
                 compObjMap.insert(std::pair<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> >(compCandNames_[itok], compcand) );
-                // if (compCandNames_[itok] == "jetsBflavorTight2p5"){
-                //     std::string varName = "JetBTagCutWeight";
-                //     const flashgg::Jet *bjet = dynamic_cast<const flashgg::Jet *>(compcand->daughter(0));
-                //     if (bjet->hasWeight("JetBTagCutWeightCentral")){
-                //         std::cout << compCandNames_[itok] + varName << ": " << bjet->weight("JetBTagCutWeightCentral") << std::endl;
-                //         // dipho->addUserFloat(compCandNames_[itok] + varName, bjet->weight("JetBTagCutWeightCentral"));
-                //     }
-                //     if (bjet->hasWeight("JetBTagCutWeight")){
-                //         std::cout << compCandNames_[itok] + varName << ": " << bjet->weight("JetBTagCutWeight") << std::endl;
-                //         // dipho->addUserFloat(compCandNames_[itok] + varName, bjet->weight("JetBTagCutWeight"));
-                //     }
-                // }
+                for (vector<string>::const_iterator it = compcand->weightListBegin(); it != compcand->weightListEnd(); it++)
+                    {
+                        std::string name = compCandNames_[itok] + *it;
+                        extraWeightsMap.insert(std::pair<std::string, float>(name, compcand->weight(*it)));
+                        std::cout << "Adding weight " << *it << " from " << compCandNames_[itok] << " as " << name << std::endl;
+                    }
             }
-            
-
+                
+                
             //            SigmaMpTTag tag_obj( dipho, mvares );
-            SigmaMpTTag tag_obj( dipho, mvares, compObjMap );
+            SigmaMpTTag tag_obj( dipho, mvares, compObjMap, extraWeightsMap );
             tag_obj.setDiPhotonIndex( candIndex );
 
             tag_obj.setSystLabel( systLabel_ );
