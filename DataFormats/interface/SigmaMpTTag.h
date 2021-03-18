@@ -15,17 +15,19 @@ namespace flashgg {
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
 
-        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, std::map<std::string, edm::Ptr<reco::CompositeCandidate> > );
-        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult>, std::map<std::string, edm::Ptr<reco::CompositeCandidate> > );
-        const edm::Ptr<reco::CompositeCandidate > getCompCand(const std::string &name) const;
+        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > );
+        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult>, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > );
+        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> >, std::map<std::string, float>);
+        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult>, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> >, std::map<std::string, float>);
+        const edm::Ptr<flashgg::WeightedCompositeCandidate > getCompCand(const std::string &name) const;
+        const float getExtraObjWeight(const std::string &name) const;
         
         virtual SigmaMpTTag *clone() const override;
         DiPhotonTagBase::tag_t tagEnum() const override {return DiPhotonTagBase::kUntagged; }
 
     private:
-        std::map<std::string, edm::Ptr<reco::CompositeCandidate > > compObjMap_;
-
-
+        std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate > > compObjMap_;
+        std::map<std::string, float > extraObjWeightsMap_;
     };
 }
 

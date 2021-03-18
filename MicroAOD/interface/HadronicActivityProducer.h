@@ -99,35 +99,13 @@ namespace flashgg {
             auto & collection = *src;
             
             int count = ( max_ > 0 ? max_ : collection.size() );
-            bool isReco = false;
-            std::cout << "-------------------InputTags-----------------" << std::endl;
-            for ( auto &tag : srcTags) {
-                if (tag.label().find("reco") != std::string::npos || tag.label().find("Reco") != std::string::npos){
-                    isReco = true;
-                }
-                std::cout << "Source Tag: "<< tag << "isReco: " << isReco <<std::endl;
-            }
-            std::cout << "-------------------InputTags-----------------" << std::endl;
             for( size_t iob = 0; iob<collection.size() && count > 0; ++iob ) {
                 auto & cand = collection.at(iob);
                 bool add = true;
                 if( ( veto_ && veto->size() > 0 ) &&
                     ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),cand) < vetocone_ ) ) { add=false; }
                 if( add ) {
-                    out.addDaughter(cand);
-                    const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
-                    if ( isReco ){
-                        if (wObj->hasWeight("JetBTagCutWeight")){
-                            std::cout << "JetBTagCutWeight HadronicActivityProducer: " << wObj->weight("JetBTagCutWeight") << std::endl;
-                        } else {
-                            std::cout << "JetBTagCutWeight HadronicActivityProducer not found!" << std::endl;
-                        }
-                        if (wObj->hasWeight("JetBTagCutWeightCentral")){
-                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer: " << wObj->weight("JetBTagCutWeightCentral") << std::endl;
-                        } else {
-                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer not found!" << std::endl;
-                        }
-                    }
+                    out.addDaughter<D>(cand);
                     --count;
                 }
             }
