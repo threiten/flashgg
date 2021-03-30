@@ -2,7 +2,7 @@
 #define flashgg_SigmaMpTTag
 
 #include "flashgg/DataFormats/interface/DiPhotonTagBase.h"
-#include "DataFormats/Candidate/interface/CompositeCandidate.h"
+#include "flashgg/DataFormats/interface/WeightedCompositeCandidate.h"
 
 namespace flashgg {
 
@@ -13,7 +13,7 @@ namespace flashgg {
         ~SigmaMpTTag();
 
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
-        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
+`        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
 
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > );
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult>, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > );

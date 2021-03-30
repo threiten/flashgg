@@ -452,6 +452,7 @@
   <version ClassVersion="10" checksum="2099650607"/>
   <version ClassVersion="11" checksum="2809364010"/>
 </class>
+
 <class name="std::vector<flashgg::DoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::DoubleHTag> >"/>
 
@@ -462,6 +463,12 @@
  <version ClassVersion="12" checksum="2509632910"/>
  <version ClassVersion="5" checksum="3026455436"/>
 </class>
+
+<class name="flashgg::WeightedCompositeCandidate" ClassVersion="0">
+</class>
+<class name="std::vector<flashgg::WeightedCompositeCandidate>"/>
+<class name="edm::Wrapper<std::vector<flashgg::WeightedCompositeCandidate> >"/>
+
 <class name="std::vector<flashgg::VBFDoubleHTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::VBFDoubleHTag> >"/>
 
