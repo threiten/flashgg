@@ -13,7 +13,7 @@ namespace flashgg {
         ~SigmaMpTTag();
 
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult );
-`        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
+        SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult> );
 
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, DiPhotonMVAResult, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > );
         SigmaMpTTag( edm::Ptr<DiPhotonCandidate>, edm::Ptr<DiPhotonMVAResult>, std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > );

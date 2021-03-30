@@ -153,17 +153,11 @@ namespace flashgg {
             std::map<std::string, float > extraWeightsMap;
             for (size_t itok=0; itok<compositeCandidatesTokens_.size(); itok++){
                 edm::Ptr<flashgg::WeightedCompositeCandidate> compcand = compositeCandidateHandles[itok]->ptrAt(candIndex);
-                if (compcand->hasWeight("JetBTagCutWeightCentral")){
-                    std::cout << "JetBTagCutWeightCentral for type " << compCandNames_[itok] << " SigmaMpTTagPreCleanerProducer: " << compcand->weight("JetBTagCutWeightCentral") << std::endl;
-                } else {
-                    std::cout << "JetBTagCutWeightCentral for type " << compCandNames_[itok] << " not found in SigmaMpTTagPreCleanerProducer !" << std::endl; 
-                }
                 compObjMap.insert(std::pair<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> >(compCandNames_[itok], compcand) );
                 for (vector<string>::const_iterator it = compcand->weightListBegin(); it != compcand->weightListEnd(); it++)
                     {
                         std::string name = compCandNames_[itok] + *it;
                         extraWeightsMap.insert(std::pair<std::string, float>(name, compcand->weight(*it)));
-                        std::cout << "Adding weight " << *it << " from " << compCandNames_[itok] << " as " << name << std::endl;
                     }
             }
                 
