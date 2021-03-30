@@ -12,6 +12,7 @@
 #include "flashgg/DataFormats/interface/SigmaMpTTag.h"
 #include "flashgg/DataFormats/interface/TagTruthBase.h"
 #include "flashgg/DataFormats/interface/WeightedObject.h"
+#include "flashgg/DataFormats/interface/WeightedCompositeCandidate.h"
 #include "flashgg/DataFormats/interface/Jet.h"
 #include "DataFormats/Common/interface/RefToPtr.h"
 
@@ -38,7 +39,7 @@ namespace flashgg {
         EDGetTokenT<View<DiPhotonCandidate> > diPhotonToken_;
         EDGetTokenT<View<DiPhotonMVAResult> > mvaResultToken_;
         EDGetTokenT<View<reco::GenParticle> > genParticleToken_;
-        std::vector<EDGetTokenT<View<reco::CompositeCandidate> > > compositeCandidatesTokens_;
+        std::vector<EDGetTokenT<View<flashgg::WeightedCompositeCandidate> > > compositeCandidatesTokens_;
         string systLabel_;
         bool requireScaledPtCuts_;
 
@@ -56,12 +57,12 @@ namespace flashgg {
         systLabel_( iConfig.getParameter<string> ( "SystLabel" ) ),
         requireScaledPtCuts_   ( iConfig.getParameter<bool> ( "RequireScaledPtCuts" ) )
     {
-        //        compositeCandidateToken_( consumes<View<reco::CompositeCandidate> >( iConfig.getParameter<InputTag> ( "CompositeCandidateTag" ) ) ),
+        //        compositeCandidateToken_( consumes<View<flashgg::WeightedCompositeCandidate> >( iConfig.getParameter<InputTag> ( "CompositeCandidateTag" ) ) ),
         if( iConfig.exists("CompositeCandidateTags") ){
             const auto CompositeCandidateTags = iConfig.getParameter<ParameterSet>("CompositeCandidateTags");
             compCandNames_ =  CompositeCandidateTags.getParameterNamesForType<InputTag>();
             for(auto & compCandName : compCandNames_){
-                compositeCandidatesTokens_.push_back( consumes<View<reco::CompositeCandidate> >( CompositeCandidateTags.getParameter<InputTag> ( compCandName ) )  ) ;
+                compositeCandidatesTokens_.push_back( consumes<View<flashgg::WeightedCompositeCandidate> >( CompositeCandidateTags.getParameter<InputTag> ( compCandName ) )  ) ;
             }
         }
         boundaries_sigmaMoM = iConfig.getParameter<vector<double > >( "BoundariesSigmaMoM" );
@@ -117,7 +118,7 @@ namespace flashgg {
 
         Handle<View<reco::GenParticle> > genParticles;
 
-        std::vector<Handle<View<reco::CompositeCandidate> > > compositeCandidateHandles(compositeCandidatesTokens_.size());
+        std::vector<Handle<View<flashgg::WeightedCompositeCandidate> > > compositeCandidateHandles(compositeCandidatesTokens_.size());
         for(size_t itok=0; itok<compositeCandidatesTokens_.size(); itok++){
             evt.getByToken(compositeCandidatesTokens_[itok], compositeCandidateHandles[itok]);
         }

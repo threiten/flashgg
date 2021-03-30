@@ -402,7 +402,9 @@ tagList = [["SigmaMpTTag", 1]]
 
 fc.bookCompositeObjects(process, customize, customize.processId,
                         process.flashggTagSequence)
+print("Jet input collection before: ", process.filteredRecoJetsEta2p50.src)
 modifyTagSequenceForSystematics(process, jetSystematicsInputTags)
+print("Jet input collection after: ", process.filteredRecoJetsEta2p50.src)
 
 process.flashggTagSorter.isGluonFusion = cms.bool(bool(customize.datasetName().count("GluGlu")))
 process.flashggTagSorter.applyNNLOPSweight = cms.bool(customize.applyNNLOPSweight) #Needs to be set before cloning tag sequence

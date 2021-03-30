@@ -51,6 +51,7 @@
 #include "flashgg/DataFormats/interface/TagAndProbeCandidate.h" //spigazzi
 #include "flashgg/DataFormats/interface/DoubleHTag.h"
 #include "flashgg/DataFormats/interface/VBFDoubleHTag.h"
+#include "flashgg/DataFormats/interface/WeightedCompositeCandidate.h"
 #include <vector>
 #include <map>
 
@@ -342,6 +343,10 @@ namespace  {
         std::vector<edm::Ptr<flashgg::PhotonJetCandidate> >        vec_ptr_fgj_dip;
         edm::Wrapper<std::vector<edm::Ptr<flashgg::PhotonJetCandidate> > >   wrp_vec_ptr_fgj_dip;
 
+        flashgg::WeightedCompositeCandidate                                       fgg_wcc;
+        std::vector<flashgg::WeightedCompositeCandidate>                      vec_fgg_wcc;
+        edm::Wrapper<std::vector<flashgg::WeightedCompositeCandidate> >   wrp_vec_fgg_wcc;
+        
         flashgg::TagCandidate                                        tags;
         edm::Wrapper<flashgg::TagCandidate>                      wrp_tags;
         std::vector<flashgg::TagCandidate>                       vec_tags;
