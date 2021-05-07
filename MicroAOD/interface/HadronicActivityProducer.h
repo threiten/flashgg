@@ -99,15 +99,6 @@ namespace flashgg {
             auto & collection = *src;
             
             int count = ( max_ > 0 ? max_ : collection.size() );
-            bool isReco = false;
-            std::cout << "-------------------InputTags-----------------" << std::endl;
-            for ( auto &tag : srcTags) {
-                if (tag.label().find("reco") != std::string::npos || tag.label().find("Reco") != std::string::npos){
-                    isReco = true;
-                }
-                std::cout << "Source Tag: "<< tag << "isReco: " << isReco <<std::endl;
-            }
-            std::cout << "-------------------InputTags-----------------" << std::endl;
             for( size_t iob = 0; iob<collection.size() && count > 0; ++iob ) {
                 auto & cand = collection.at(iob);
                 bool add = true;
