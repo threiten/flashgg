@@ -99,7 +99,7 @@ namespace flashgg {
             auto & collection = *src;
             
             int count = ( max_ > 0 ? max_ : collection.size() );
-            bool isReco = false;
+            // bool isReco = false;
             // std::cout << "-------------------InputTags-----------------" << std::endl;
             // for ( auto &tag : srcTags) {
             //     if (tag.label().find("reco") != std::string::npos || tag.label().find("Reco") != std::string::npos){
@@ -115,7 +115,7 @@ namespace flashgg {
                     ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),cand) < vetocone_ ) ) { add=false; }
                 if( add ) {
                     out.addDaughter(cand);
-                    const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
+                    // const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
                     // if ( isReco ){
                     //     if (wObj->hasWeight("JetBTagCutWeight")){
                     //         std::cout << "JetBTagCutWeight HadronicActivityProducer: " << wObj->weight("JetBTagCutWeight") << std::endl;
