@@ -388,6 +388,7 @@ emptySigma = cms.PSet(
 
 
 scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc")
+# scalesAndSmearingsPrefix = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc_stochastic")
 #scalesAndSmearingsPrefixForSigmaEOverE = scalesAndSmearingsPrefix
 
 MCScaleHighR9EB = cms.PSet( PhotonMethodName = cms.string("FlashggPhotonScale"),
