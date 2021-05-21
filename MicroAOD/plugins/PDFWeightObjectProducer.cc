@@ -254,7 +254,7 @@ namespace flashgg {
                     for(auto it = PDFmapString_.begin(); it != PDFmapString_.end(); it++){
                         if(it->second == (unsigned int)pdfidx){
                             pdfvar= it->first;
-                            if(debug_)std::cout<<"setting pdf var to "<<pdfvar<<std::endl;
+                            std::cout<<"setting pdf var to "<<pdfvar<<std::endl; //if(debug_)
                         }
                     }
                     if (pdfidx == 325300 && pdfvar == "NNPDF31_nnlo_as_0118_mc_hessian_pdfas") {
@@ -265,6 +265,7 @@ namespace flashgg {
 
                 }
                 }
+                std::cout<<"PDFVAR: "<<pdfvar<<std::endl;
 
                
 
@@ -531,7 +532,7 @@ namespace flashgg {
         if(doAlphasWeights_)assert(PDFWeightProducer::alpha_indices.size() == 2);
 		
         // --- Get MCtoHessian PDF weights
-        if((isStandardSample_ && mc2hessianCSV_ != "") || (pdfvar.find("hessian") == std::string::npos && mc2hessianCSV_ != ""))
+        if(isStandardSample_ && mc2hessianCSV_ != "" && pdfvar.find("hessian") == std::string::npos)
         {
             edm::FileInPath mc2hessianCSVFile(mc2hessianCSV_);
             pdfweightshelper_.Init(PDFWeightProducer::pdf_indices.size(),nPdfEigWeights_,mc2hessianCSVFile);
@@ -542,16 +543,20 @@ namespace flashgg {
         //        double nomlheweight = LHEEventHandle->weights()[0].wgt;//ok, but not-safe to access the vector, see line below
         double nomlheweight = LHEEventHandle->originalXWGTUP();
         
-        if((isStandardSample_ && mc2hessianCSV_ != "") || (pdfvar.find("hessian") == std::string::npos && mc2hessianCSV_ != ""))
+        if(isStandardSample_ && mc2hessianCSV_ != "" && pdfvar.find("hessian") == std::string::npos)
             {
+                std::cout << "Doing MC2Hessian!" << std::endl;
                 pdfweightshelper_.DoMC2Hessian(nomlheweight,inpdfweights.data(),outpdfweights.data());   
             }
+        else {
+            std::cout << "NOT Doing MC2Hessian!" << std::endl;
+        }
         
         for (unsigned int iwgt=0; iwgt<nPdfEigWeights_; ++iwgt) {
             
 
             double wgtval = inpdfweights[iwgt];
-            if ((isStandardSample_  && mc2hessianCSV_ != "") || (pdfvar.find("hessian") == std::string::npos && mc2hessianCSV_ != ""))wgtval = outpdfweights[iwgt];
+            if (isStandardSample_ && mc2hessianCSV_ != "" && pdfvar.find("hessian") == std::string::npos)wgtval = outpdfweights[iwgt];
             
             
             float real_weight = wgtval*gen_weight/nomlheweight;

@@ -106,19 +106,6 @@ namespace flashgg {
                     ( reco::deltaR(*(veto->at(idipho).leadingPhoton()),cand) < vetocone_ || reco::deltaR(*(veto->at(idipho).subLeadingPhoton()),cand) < vetocone_ ) ) { add=false; }
                 if( add ) {
                     out.addDaughter(cand);
-                    const flashgg::WeightedObject *wObj = dynamic_cast<const flashgg::WeightedObject *>(&cand);
-                    if ( isReco ){
-                        if (wObj->hasWeight("JetBTagCutWeight")){
-                            std::cout << "JetBTagCutWeight HadronicActivityProducer: " << wObj->weight("JetBTagCutWeight") << std::endl;
-                        } else {
-                            std::cout << "JetBTagCutWeight HadronicActivityProducer not found!" << std::endl;
-                        }
-                        if (wObj->hasWeight("JetBTagCutWeightCentral")){
-                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer: " << wObj->weight("JetBTagCutWeightCentral") << std::endl;
-                        } else {
-                            std::cout << "JetBTagCutWeightCentral HadronicActivityProducer not found!" << std::endl;
-                        }
-                    }
                     --count;
                 }
             }
