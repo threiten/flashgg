@@ -148,15 +148,22 @@ namespace flashgg {
             
             //edm::Ptr<reco::CompositeCandidate> > compcands = compositeCandidates->ptrAt( candIndex );
             
-            std::map<std::string, edm::Ptr<reco::CompositeCandidate> > compObjMap;
+            std::map<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> > compObjMap;
+            std::map<std::string, float > extraWeightsMap;
             for (size_t itok=0; itok<compositeCandidatesTokens_.size(); itok++){
-                edm::Ptr<reco::CompositeCandidate> compcand = compositeCandidateHandles[itok]->ptrAt(candIndex);
-                compObjMap.insert(std::pair<std::string, edm::Ptr<reco::CompositeCandidate> >(compCandNames_[itok], compcand) );
+                edm::Ptr<flashgg::WeightedCompositeCandidate> compcand = compositeCandidateHandles[itok]->ptrAt(candIndex);
+                compObjMap.insert(std::pair<std::string, edm::Ptr<flashgg::WeightedCompositeCandidate> >(compCandNames_[itok], compcand) );
+                for (vector<string>::const_iterator it = compcand->weightListBegin(); it != compcand->weightListEnd(); it++)
+                    {
+                        std::string name = compCandNames_[itok] + *it;
+                        extraWeightsMap.insert(std::pair<std::string, float>(name, compcand->weight(*it)));
+                        std::cout << "Adding weight " << *it << " from " << compCandNames_[itok] << " as " << name << std::endl;
+                    }
             }
-            
-
+                
+                
             //            SigmaMpTTag tag_obj( dipho, mvares );
-            SigmaMpTTag tag_obj( dipho, mvares, compObjMap );
+            SigmaMpTTag tag_obj( dipho, mvares, compObjMap, extraWeightsMap );
             tag_obj.setDiPhotonIndex( candIndex );
 
             tag_obj.setSystLabel( systLabel_ );

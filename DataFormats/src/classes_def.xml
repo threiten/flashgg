@@ -57,8 +57,10 @@
 <class name="flashgg::NoTag"/>
 <class name="std::vector<flashgg::NoTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::NoTag> >"/>
-<class name="flashgg::SigmaMpTTag" ClassVersion="0">
-  <version ClassVersion="0" checksum="2104351160"/>
+<class name="flashgg::SigmaMpTTag" ClassVersion="11">
+ <!-- <version ClassVersion="11" checksum="3801852758"/> -->
+ <version ClassVersion="10" checksum="3801852758"/>
+ <version ClassVersion="11" checksum="136726624"/>
 </class>
 <class name="std::vector<flashgg::SigmaMpTTag>"/>
 <class name="edm::Wrapper<std::vector<flashgg::SigmaMpTTag> >"/>
