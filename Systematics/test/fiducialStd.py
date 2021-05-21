@@ -257,13 +257,16 @@ if is_signal:
     variablesToUse.append("sigmawv := diPhotonMVA().sigmawv")
     variablesToUse.append("vtxprob := diPhotonMVA().vtxprob")
     variablesToUse.append("CosPhi := diPhotonMVA().CosPhi")
-    variablesToUse.append("NNLOPSweight[1,-999999.,999999.] := getTheoryWeight(\"NNLOPS\")")
+    variablesToUse.append("NNLOPSweight[1,-999999.,999999.] := getTheoryWeight(\"NNLOPSweight\")")
+    # variablesToUse.append("NNLOPSObjectWeight[1,-999999.,999999.] := getObjectWeight(\"NNLOPSweight\")")
+    # variablesToUse.append("NNLOPSweight[1,-999999.,999999.] := weight(\"NNLOPSweight\")")
     variablesToUse.append("JetBTagCutWeightCentral[1,-999999.,999999.] := getExtraObjWeight( \"jetsBflavorTight2p5JetBTagCutWeightCentral\" )")
     variablesToUse.append("ElectronIDWeight[1,-999999.,999999.] := getExtraObjWeight( \"electronsElectronIDWeightCentral\" )")
     variablesToUse.append("ElectronRecoWeight[1,-999999.,999999.] := getExtraObjWeight( \"electronsElectronRecoWeightCentral\" )")
     variablesToUse.append("MuonIsoWeight[1,-999999.,999999.] := getExtraObjWeight( \"muonsMuon%sISOWeightCentral\" )" %(str(customize.metaConditions['MUON_ISO'])))
     variablesToUse.append("MuonIDWeight[1,-999999.,999999.] := getExtraObjWeight(\"muonsMuon%sIDWeightCentral\")" % (str(customize.metaConditions["MUON_ID"])))
-#        variablesToUse.append("subleadmva := diPhotonMVA().subleadmva")
+    # variablesToUse.append("MuonIsoWeight[1,-999999.,999999.] := ? hasWeight( 'Muon%sISOWeight' ) ? weight(\"Muon%sISOWeight\") : -999" %(str(customize.metaConditions['MUON_ISO']), str(customize.metaConditions['MUON_ISO'])))
+    #        variablesToUse.append("subleadmva := diPhotonMVA().subleadmva")
 
     if customize.doSystematics:
         systematicVariables.extend(fc.getGenVariables(True))
@@ -315,7 +318,7 @@ if is_signal:
             variablesToUse.append("JetBTagCutWeight%s01sigma[1,-999999.,999999.] := getExtraObjWeight( \"jetsBflavorTight2p5JetBTagCutWeight%s01sigma\" )" % (direction,direction))
             # variablesToUse.append("JetBTagReshapeWeight%s01sigma[1,-999999.,999999.] := getObjectWeight(\"JetBTagReshapeWeight%s01sigma\")" % (direction,direction))
             if applyL1Prefiring:
-                variablesToUse.append("prefireProbability%s01sigma[1,-999999.,999999.] := weight(\"prefireProbability%s01sigma\")" % (direction,direction))
+                variablesToUse.append("prefireWeight%s01sigma[1,-999999.,999999.] := ? hasWeight(\"prefireWeight%s01sigma\") ? weight(\"prefireWeight%s01sigma\") : -999." % (direction,direction,direction))
             variablesToUse.append("THU_ggH_Mu%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mu%s01sigma\")" % (direction,direction))
             variablesToUse.append("THU_ggH_Res%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Res%s01sigma\")" % (direction,direction))
             variablesToUse.append("THU_ggH_Mig01%s01sigma[1,-999999.,999999.] := getTheoryWeight(\"THU_ggH_Mig01%s01sigma\")" % (direction,direction))
