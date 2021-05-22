@@ -254,7 +254,7 @@ namespace flashgg {
                     for(auto it = PDFmapString_.begin(); it != PDFmapString_.end(); it++){
                         if(it->second == (unsigned int)pdfidx){
                             pdfvar= it->first;
-                            std::cout<<"setting pdf var to "<<pdfvar<<std::endl; //if(debug_)
+                            if(debug_) std::cout<<"setting pdf var to "<<pdfvar<<std::endl;
                         }
                     }
                     if (pdfidx == 325300 && pdfvar == "NNPDF31_nnlo_as_0118_mc_hessian_pdfas") {
@@ -545,12 +545,8 @@ namespace flashgg {
         
         if(isStandardSample_ && mc2hessianCSV_ != "" && pdfvar.find("hessian") == std::string::npos)
             {
-                std::cout << "Doing MC2Hessian!" << std::endl;
                 pdfweightshelper_.DoMC2Hessian(nomlheweight,inpdfweights.data(),outpdfweights.data());   
             }
-        else {
-            std::cout << "NOT Doing MC2Hessian!" << std::endl;
-        }
         
         for (unsigned int iwgt=0; iwgt<nPdfEigWeights_; ++iwgt) {
             
