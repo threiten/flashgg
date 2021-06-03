@@ -95,7 +95,7 @@ def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=F
     reqCpus = any(["RequestCpus" in line for line in fileinput.input("%s/%s_mis.sub"%(dir,cluster))])
     for line in fileinput.input("%s/%s_mis.sub"%(dir,cluster), inplace=True):
       if  "queue" in line and reqCpus: print ("queue %d "%(len(runJobs_dict[cluster]))),
-      elif "queue" in line and not reqCpus: print ("RequestCpus = 2\nqueue %d "%(len(runJobs_dict[cluster]))),
+      elif "queue" in line and not reqCpus: print ("RequestCpus = 4\nqueue %d "%(len(runJobs_dict[cluster]))),
       elif "max_retries" in line: print("max_retries = 2\n"),
       elif "RequestCpus" in line:
         print("RequestCpus = 10\n")
@@ -114,6 +114,8 @@ def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=F
         line1 = line[ind:]
         line_ins = "filterNegR9=True "
         print (line0 + line_ins + line1),
+      # elif ("_M120_" in line or "_M130_" in line) and "recalculatePDFWeights=True" in line:
+      #   print line.replace("recalculatePDFWeights=True ", ""),
       else : print line,
 
 

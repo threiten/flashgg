@@ -511,15 +511,15 @@ def addJetGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
 #    variables += getJetKinVariables(pre,post,["pt[667,0.0,10005.0]","eta[50,-5.0,5.0]","rapidity[50,0.0,10.0]"],5)
     if pre =="reco":
         variables += getJetKinVariables(pre,post,["pt","eta","rapidity","phi","px","py","pz", "energy", "numberOfDaughters[200,-0.5,199.5]", "puJetIdMVA", ],6, getter)
-        if post == "BflavorTight2p5":
-            variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
-            variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))
-            variables.append("JetBTagCutWeightWCompObj := ? {0}hasWeight( 'JetBTagCutWeightCentral' ) ? {0}weight( 'JetBTagCutWeightCentral' ) :-999".format(getter))
-            variables.append("JetBTagReshapeWeightWCompObj := ? {0}hasWeight( \"JetBTagReshapeWeightCentral\" ) ? {0}weight( \"JetBTagReshapeWeightCentral\" ) :-999".format(getter))
-            variables.append('JetBTagCutWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( "JetBTagCutWeightCentral" ) : -999'.format(getter))
-            variables.append('hasJetBTagCutWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( "JetBTagCutWeightCentral" ) : -999'.format(getter))
-            variables.append('hasJetBTagReshapeWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( "JetBTagReshapeWeightCentral" ) :-999'.format(getter))
-            variables.append('JetBTagReshapeWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( "JetBTagReshapeWeightCentral" ) : -999'.format(getter))
+        # if post == "BflavorTight2p5":
+        #     variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
+        #     variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))
+        #     variables.append("JetBTagCutWeightWCompObj := ? {0}hasWeight( 'JetBTagCutWeightCentral' ) ? {0}weight( 'JetBTagCutWeightCentral' ) :-999".format(getter))
+        #     variables.append("JetBTagReshapeWeightWCompObj := ? {0}hasWeight( \"JetBTagReshapeWeightCentral\" ) ? {0}weight( \"JetBTagReshapeWeightCentral\" ) :-999".format(getter))
+        #     variables.append('JetBTagCutWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( "JetBTagCutWeightCentral" ) : -999'.format(getter))
+        #     variables.append('hasJetBTagCutWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( "JetBTagCutWeightCentral" ) : -999'.format(getter))
+        #     variables.append('hasJetBTagReshapeWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( "JetBTagReshapeWeightCentral" ) :-999'.format(getter))
+        #     variables.append('JetBTagReshapeWeightCompObjDau := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( "JetBTagReshapeWeightCentral" ) : -999'.format(getter))
         # if post == "BflavorTight2p5":
         #     variables.append("recoBflavorDeepFlavourTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:probbb' ) + {0}daughter(0).bDiscriminator( 'mini_pfDeepFlavourJetTags:problepb' ): -999".format(getter))
         #     variables.append("recoBflavorDeepCSVTight2p50BTagScore := ? {0}numberOfDaughters > 0 ? {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probb' ) + {0}daughter(0).bDiscriminator( 'pfDeepCSVJetTags:probbb' ): -999".format(getter))
@@ -854,6 +854,7 @@ def addGenOnlyAnalysis(process,options,processId,tagSequence,acceptance,tagList,
     genVariables  = getGenVariables(False)
     recoVariables = getRecoVariables(False)
     recoVariables.extend( ["leadmva := recoTagObj.diPhoton.leadingView.phoIdMvaWrtChosenVtx", "subleadmva := recoTagObj.diPhoton.subLeadingView.phoIdMvaWrtChosenVtx"] )
+    NNLOPSvar = ["NNLOPSweight[1,-999999.,999999.] := recoTagObj.tagTruth.weight(\"NNLOPSweight\")"]
 ##    recoVariables.extend( ["costheta := ( ( recoTagObj.diPhoton.leadingPhoton.energy + recoTagObj.diPhoton.leadingPhoton.p4.pz ) * ( recoTagObj.diPhoton.subLeadingPhoton.energy - recoTagObj.diPhoton.subLeadingPhoton.p4.pz ) - ( recoTagObj.diPhoton.leadingPhoton.energy - recoTagObj.diPhoton.leadingPhoton.p4.pz ) * ( recoTagObj.diPhoton.subLeadingPhoton.energy + recoTagObj.diPhoton.subLeadingPhoton.p4.pz ) ) / ( recoTagObj.diPhoton.mass * sqrt( recoTagObj.diPhoton.mass * recoTagObj.diPhoton.mass + recoTagObj.diPhoton.pt * recoTagObj.diPhoton.pt ) )"] )
     cfgTools.addCategory(process.genDiphotonDumper,
                          "NoTag", 'isTagged("")',1,
@@ -873,7 +874,7 @@ def addGenOnlyAnalysis(process,options,processId,tagSequence,acceptance,tagList,
             cfgTools.addCategory(process.genDiphotonDumper,
                                  "%s_%d" % ( tagName, isub ), 
                                  'isTagged("%s") && categoryNumber == %d' % (tagName, isub),0,
-                                 variables=genVariables+recoVariables,
+                                 variables=genVariables+recoVariables+NNLOPSvar,
                                  dumpPdfWeights=dumpPdfWeights,
                                  nPdfWeights=nPdfWeights,
                                  nAlphaSWeights=nAlphaSWeights,
