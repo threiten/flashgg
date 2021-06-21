@@ -279,6 +279,11 @@ if is_signal:
             "subleadmva[200,-1.0,1.0] := diPhotonMVA().subleadmva")
         systematicVariables.append(
             "sigmarv := diPhotonMVA().sigmarv")
+        systematicVariables.append("JetBTagCutWeightCentral[1,-999999.,999999.] := getExtraObjWeight( \"jetsBflavorTight2p5JetBTagCutWeightCentral\" )")
+        systematicVariables.append("ElectronIDWeight[1,-999999.,999999.] := getExtraObjWeight( \"electronsElectronIDWeightCentral\" )")
+        systematicVariables.append("ElectronRecoWeight[1,-999999.,999999.] := getExtraObjWeight( \"electronsElectronRecoWeightCentral\" )")
+        systematicVariables.append("MuonIsoWeight[1,-999999.,999999.] := getExtraObjWeight( \"muonsMuon%sISOWeightCentral\" )" %(str(customize.metaConditions['MUON_ISO'])))
+        systematicVariables.append("MuonIDWeight[1,-999999.,999999.] := getExtraObjWeight(\"muonsMuon%sIDWeightCentral\")" % (str(customize.metaConditions["MUON_ID"])))
 
     if customize.doSystematics:
         for direction in ["Up", "Down"]:

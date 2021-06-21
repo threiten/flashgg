@@ -98,7 +98,7 @@ def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=F
       elif "queue" in line and not reqCpus: print ("RequestCpus = 4\nqueue %d "%(len(runJobs_dict[cluster]))),
       elif "max_retries" in line: print("max_retries = 2\n"),
       elif "RequestCpus" in line and not oneCpu:
-        print("RequestCpus = 8\n")
+        print("RequestCpus = 4\n")
       elif "RequestCpus" in line and oneCpu:
         print("\n")
       else : print line,
