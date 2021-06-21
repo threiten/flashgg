@@ -7119,7 +7119,7 @@
                 "weights": 107551.1953125
             }, 
             {
-                "bad": false, 
+                "bad": true, 
                 "events": 25000, 
                 "name": "/store/user/alesauva/flashgg/UL2017_3/10_6_4/VBFHToGG_M120_TuneCP5_13TeV-amcatnlo-pythia8/UL2017_3-10_6_4-v0-RunIISummer19UL17MiniAOD-106X_mc2017_realistic_v6-v1/200718_081841/0000/myMicroAODOutputFile_23.root", 
                 "nevents": 25000, 

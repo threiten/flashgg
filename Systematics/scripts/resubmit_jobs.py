@@ -82,7 +82,7 @@ def submit_missing(runJobs_dict,dir,resubmit=True):
       print bashCommand
 
 
-def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=False):
+def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=False, oneCpu=False):
   for cluster in runJobs_dict.keys():
     bashCommand = "cp %s/%s.sub %s/%s_mis.sub"%(dir,cluster,dir,cluster)
     os.system(bashCommand)
@@ -95,15 +95,17 @@ def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=F
     reqCpus = any(["RequestCpus" in line for line in fileinput.input("%s/%s_mis.sub"%(dir,cluster))])
     for line in fileinput.input("%s/%s_mis.sub"%(dir,cluster), inplace=True):
       if  "queue" in line and reqCpus: print ("queue %d "%(len(runJobs_dict[cluster]))),
-      elif "queue" in line and not reqCpus: print ("RequestCpus = 2\nqueue %d "%(len(runJobs_dict[cluster]))),
+      elif "queue" in line and not reqCpus: print ("RequestCpus = 4\nqueue %d "%(len(runJobs_dict[cluster]))),
       elif "max_retries" in line: print("max_retries = 2\n"),
-      elif "RequestCpus" in line:
+      elif "RequestCpus" in line and not oneCpu:
         print("RequestCpus = 8\n")
+      elif "RequestCpus" in line and oneCpu:
+        print("\n")
       else : print line,
     for line in fileinput.input("%s/%s.sh"%(dir,cluster), inplace=True):
       if  "declare -a jobIdsMap" in line : print ("declare -a jobIdsMap=(%s)\n"%(jobs_to_run)),
       elif "cmsRun" in line and parentDataset and "recalculatePDFWeights=True" not in line:
-        ind = line.index("copyInputMicroAOD")
+        ind = line.index("doGranularJEC")
         line0 = line[:ind]
         line1 = line[ind:]
         line_ins = "recalculatePDFWeights=True "
@@ -114,6 +116,8 @@ def prepare_runJobs_missing(runJobs_dict,dir, parentDataset=False, negR9Filter=F
         line1 = line[ind:]
         line_ins = "filterNegR9=True "
         print (line0 + line_ins + line1),
+      elif ("_M120_" in line or "_M130_" in line) and "recalculatePDFWeights=True" in line:
+        print line.replace("recalculatePDFWeights=True ", ""),
       else : print line,
 
 
@@ -132,6 +136,7 @@ def main():
   parser.add_option("-p", "--parentDataset", action="store_true",  dest="parentDataset",default=False,
                   help="use parent dataset")
   parser.add_option("-f", "--filterNegR9", action="store_true",  dest="filterNegR9",default=False, help="use parent dataset")
+  parser.add_option("--oneCpu", action="store_true",  dest="oneCpu",default=False, help="use only one cpu")
 
   (options, args) = parser.parse_args()
   dir = os.path.dirname(os.path.abspath('%s/task_config.json'%options.dir))
@@ -154,7 +159,7 @@ def main():
   #print 'Missing the following files : ' not_finished
   runJobs_dict = find_runJobs(not_finished,dir)
   print 'runJobs to be resubmitted : ',runJobs_dict
-  prepare_runJobs_missing(runJobs_dict,dir,options.parentDataset, options.filterNegR9)
+  prepare_runJobs_missing(runJobs_dict,dir,options.parentDataset, options.filterNegR9, options.oneCpu)
   print 'Submitting missing jobs : '
   submit_missing(runJobs_dict,dir,options.resubmit)
 
