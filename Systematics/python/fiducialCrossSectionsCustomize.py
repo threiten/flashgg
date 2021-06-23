@@ -581,10 +581,11 @@ def addLeptonGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
     if getter != "": getter += "."
     variables  = [ "%(pre)sNleptons%(post)s[-1,(-0.5:0.5:1.5:2.5:3.5:100)]:= %(getter)snumberOfDaughters" % locals() ]
 
-    variables += getObjKinVariables(pre,post,"Lepton",["pt","eta","rapidity","phi","px","py","pz", "energy" ],4, getter)
+    variables += getObjKinVariables(pre,post,"Lepton",["pt","eta","rapidity","phi","px","py","pz", "energy", "mass" ],4, getter)
+    variables += [ "%(pre)sDiLeptonMass%(post)s := ? %(getter)snumberOfDaughters > 1 ? sqrt( (%(getter)sdaughter(0).energy+%(getter)sdaughter(1).energy)^2 - (%(getter)sdaughter(0).px+%(getter)sdaughter(1).px)^2 - (%(getter)sdaughter(0).py+%(getter)sdaughter(1).py)^2 - (%(getter)sdaughter(0).pz+%(getter)sdaughter(1).pz)^2 ) : 0" % locals() ]
 
-##    variables += [ "%(pre)sLeptonPt%(post)s0 := ? %(getter)snumberOfDaughters > 0 ? %(getter)sdaughter(0).p4().pt : -999" % locals() ]
-##    variables += [ "%(pre)sLeptonPt%(post)s1 := ? %(getter)snumberOfDaughters > 1 ? %(getter)sdaughter(1).p4().pt : -999" % locals() ]
+    # variables += [ "%(pre)sLeptonPdgId%(post)s0 := ? %(getter)snumberOfDaughters > 0 ? %(getter)sdaughter(0).pdgId : -999" % locals() ]
+    # variables += [ "%(pre)sLeptonPdgId%(post)s1 := ? %(getter)snumberOfDaughters > 1 ? %(getter)sdaughter(1).pdgId : -999" % locals() ]
 ##    variables += [ "%(pre)sLeptonPt%(post)s2 := ? %(getter)snumberOfDaughters > 2 ? %(getter)sdaughter(2).p4().pt : -999" % locals() ]
 ##    variables += [ "%(pre)sLeptonPt%(post)s3 := ? %(getter)snumberOfDaughters > 3 ? %(getter)sdaughter(3).p4().pt : -999" % locals() ]
 ##
@@ -606,7 +607,6 @@ def addLeptonGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
 #    variables += getLeptonKinVariables(pre,post,["dressedP4().pt"],3, getter)
 #    print variables
 ###    variables += getLeptonKinVariables(pre,post,["pt","eta","rapidity"],5)
-###    variables += [ "%sDijetMass%s := ? numberOfDaughters > 1 ? sqrt( (daughter(0).energy+daughter(1).energy)^2 - (daughter(0).px+daughter(1).px)^2 - (daughter(0).py+daughter(1).py)^2 - (daughter(0).pz+daughter(1).pz)^2 ) : 0" % (pre,post) ]
     
     if src:
         cfgTools.addGlobalFloats(process,dumper.globalVariables,src,variables,tagSequence)
@@ -625,6 +625,7 @@ def addMuonGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
     variables  = [ "%(pre)sNmuons%(post)s[-1,(-0.5:0.5:1.5:2.5:3.5:100)]:= %(getter)snumberOfDaughters" % locals() ]
 
     variables += getObjKinVariables(pre,post,"Muon",["pt","eta","rapidity","phi","px","py","pz", "energy" ],4, getter)
+    variables += [ "%(pre)sDiMuonMass%(post)s := ? %(getter)snumberOfDaughters > 1 ? sqrt( ( %(getter)sdaughter(0).energy+ %(getter)sdaughter(1).energy)^2 - ( %(getter)sdaughter(0).px+ %(getter)sdaughter(1).px)^2 - ( %(getter)sdaughter(0).py+ %(getter)sdaughter(1).py)^2 - ( %(getter)sdaughter(0).pz+ %(getter)sdaughter(1).pz)^2 ) : 0" % locals() ]
 
 
 ##    variables += [ "%(pre)sMuonPt%(post)s0 := ? %(getter)snumberOfDaughters > 0 ? %(getter)sdaughter(0).pt : -999" % locals() ]
@@ -652,7 +653,7 @@ def addMuonGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""):
 #    variables += getLeptonKinVariables(pre,post,["dressedP4().pt"],3, getter)
 #    print variables
 ###    variables += getLeptonKinVariables(pre,post,["pt","eta","rapidity"],5)
-###    variables += [ "%sDijetMass%s := ? numberOfDaughters > 1 ? sqrt( (daughter(0).energy+daughter(1).energy)^2 - (daughter(0).px+daughter(1).px)^2 - (daughter(0).py+daughter(1).py)^2 - (daughter(0).pz+daughter(1).pz)^2 ) : 0" % (pre,post) ]
+
     
     if src:
         cfgTools.addGlobalFloats(process,dumper.globalVariables,src,variables,tagSequence)
@@ -668,6 +669,7 @@ def addElectronGlobalVariables(process,dumper,src,pre,post,tagSequence,getter=""
 
     if getter != "": getter += "."
     variables  = [ "%(pre)sNelectrons%(post)s[-1,(-0.5:0.5:1.5:2.5:3.5:100)]:= %(getter)snumberOfDaughters" % locals() ]
+    variables += [ "%(pre)sDiElectronMass%(post)s := ? %(getter)snumberOfDaughters > 1 ? sqrt( ( %(getter)sdaughter(0).energy+ %(getter)sdaughter(1).energy)^2 - ( %(getter)sdaughter(0).px+ %(getter)sdaughter(1).px)^2 - ( %(getter)sdaughter(0).py+ %(getter)sdaughter(1).py)^2 - ( %(getter)sdaughter(0).pz+ %(getter)sdaughter(1).pz)^2 ) : 0" % locals() ]
     # variables.append("ElectronIDWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'ElectronIDWeight' ) : -999".format(getter))
     # variables.append("hasElectronIDWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).hasWeight( 'ElectronIDWeight' ) : -999".format(getter))
     # variables.append("ElectronRecoWeightCompObj := ? {0}numberOfDaughters > 0 ? {0}daughter(0).weight( 'ElectronRecoWeight' ) : -999".format(getter))
